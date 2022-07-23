@@ -8,6 +8,7 @@ const globalErrorHandler = (err, req, res, next) => {
     data: {
       message: err.message,
       isOperational: err.isOperational === true,
+      stacktrace: this.stack,
     },
   });
 };

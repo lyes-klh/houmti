@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
-const catchAsync = require('../utils/catchAsync');
 
 const userSchema = new mongoose.Schema({
   firstname: {
@@ -37,13 +36,17 @@ const userSchema = new mongoose.Schema({
     default: false,
     select: false,
   },
+
+  passwordChangedAt: Date,
+
+  resetToken: String,
+  resetTokenExpires: Date,
 });
 
 userSchema.pre('save', async function (next) {
-  // if (!this.isModified('password')) return next();
+  if (!this.isModified('password')) return next();
 
   this.password = await bcrypt.hash(this.password, 12);
-  console.log(`password successfully hashed for user : ${this}`);
 });
 
 module.exports = mongoose.model('User', userSchema);

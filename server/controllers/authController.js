@@ -1,9 +1,11 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
 
 const User = require('../models/userModel');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/AppError');
+const sendEmail = require('../utils/sendEmail');
 
 //Sign JWT Async
 const signJWT = (userId) => {
@@ -106,5 +108,141 @@ exports.protect = catchAsync(async (req, res, next) => {
       new AppError('You are not logged in, please login to continue', 401)
     );
 
+  // check if user still exist
+  const user = await User.findOne({ _id: decoded.userId });
+  if (!user)
+    return next(
+      new AppError('This user does not exist, please login to continue', 401)
+    );
+
+  // check if user changed password after jwt was issued
+  const changedPassword = user.passwordChangedAt > decoded.iat * 1000;
+
+  if (changedPassword)
+    return next(new AppError('This token is not valid anymore', 401));
+
+  req.user = user;
+
   next();
+});
+
+const randomBytes = (size) => {
+  return new Promise((resolve, reject) => {
+    crypto.randomBytes(size, (err, buffer) => {
+      if (err) reject(err);
+      resolve(buffer);
+    });
+  });
+};
+
+exports.forgotPassword = catchAsync(async (req, res, next) => {
+  const { email } = req.body;
+  if (!email) return next(new AppError('Please provide your email', 400));
+
+  const user = await User.findOne({ email });
+  if (!user)
+    return next(
+      new AppError('Email provided does not match with any account', 400)
+    );
+
+  // create and save hashed token
+  let resetToken = await randomBytes(16);
+  resetToken = resetToken.toString('hex');
+  const resetTokenHashed = crypto
+    .createHash('sha256')
+    .update(resetToken)
+    .digest('hex');
+
+  user.resetToken = resetTokenHashed;
+  user.resetTokenExpires = Date.now() + 10 * 60 * 1000;
+  await user.save();
+
+  // we send the unhashed token via email
+  const resetURL = `${req.protocol}://${req.hostname}${req.baseUrl}/resetPassword/${resetToken}`;
+  htmlBody = `<div>
+  <h1>Reset you password : </h1>
+  <p><a href="${resetURL}">${resetURL}</a></p>
+  </div>`;
+
+  try {
+    const options = {
+      from: '"Houmti Admin" admin@houmti.com',
+      to: `${email}`,
+      subject: `Houmti: Reset Your Password`,
+      text: resetURL,
+      html: htmlBody,
+    };
+
+    await sendEmail(options);
+
+    res.json({
+      status: 'success',
+      data: {
+        message: 'Email sent successfully',
+      },
+    });
+  } catch (err) {
+    user.resetToken = undefined;
+    user.resetTokenExpires = undefined;
+    await user.save();
+
+    return next(new AppError("Couldn't send email, please try again", 500));
+  }
+});
+
+exports.resetPassword = catchAsync(async (req, res, next) => {
+  const { email, newPassword } = req.body;
+  if (!email || !newPassword)
+    return next(
+      new AppError('Please provide your email and a new password', 400)
+    );
+
+  const { token } = req.params;
+  if (!token)
+    return next(
+      new AppError(
+        'Please provide a password reset token in the url parameters',
+        400
+      )
+    );
+
+  const user = await User.findOne({ email });
+  if (!user) return next(new AppError('This user does not exist', 400));
+
+  const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
+
+  const correctToken = user.resetToken === hashedToken;
+  if (!correctToken || Date.now() > user.resetTokenExpires)
+    return next(
+      new AppError(`This reset token is not valid ${hashedToken}`, 400)
+    );
+
+  user.password = newPassword;
+  user.passwordChangedAt = Date.now() - 1000;
+  user.resetToken = undefined;
+  user.resetTokenExpires = undefined;
+  await user.save();
+
+  await createAndSendJWT(user, res, 200);
+});
+
+exports.updatePassword = catchAsync(async (req, res, next) => {
+  const { password: currentPassword, newPassword } = req.body;
+  if (!currentPassword || !newPassword)
+    return next(
+      new AppError('Please provide your current and new password', 400)
+    );
+
+  const user = await User.findById({ _id: req.user._id }).select('+password');
+
+  const passwordChecked = await bcrypt.compare(currentPassword, user.password);
+
+  if (!passwordChecked)
+    return next(new AppError('Your password is wrong, please try again', 401));
+
+  user.password = newPassword;
+  user.passwordChangedAt = Date.now() - 1000;
+  await user.save();
+
+  await createAndSendJWT(user, res, 200);
 });
