@@ -1,15 +1,20 @@
 const express = require('express');
-const cityModel = require('../models/cityModel');
+
+const { protect, restrictToAdmin } = require('../controllers/authController');
+const {
+  getAllCities,
+  createCity,
+  updateCity,
+  deleteCity,
+} = require('../controllers/citiesController');
 
 const router = express.Router();
 
-router.post('/', async (req, res, next) => {
-  const newCity = await cityModel.create(req.body);
+router.use(protect);
+router.route('/').get(getAllCities);
 
-  res.status(201).json({
-    status: 'success',
-    data: { newCity },
-  });
-});
+router.use(restrictToAdmin);
+router.route('/').post(createCity);
+router.route('/:id').patch(updateCity).delete(deleteCity);
 
 module.exports = router;

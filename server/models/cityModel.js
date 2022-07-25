@@ -19,11 +19,13 @@ const citySchema = new mongoose.Schema({
   countryISOCode: {
     type: String,
     required: [true, 'Country must have an ISO code'],
+    unique: true,
   },
 
   countryCode: {
     type: String,
     required: [true, 'Country must have a phone code'],
+    unique: true,
   },
 });
 
