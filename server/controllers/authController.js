@@ -35,7 +35,8 @@ const createAndSendJWT = catchAsync(async (user, res, statusCode) => {
   const cookieOptions = {
     httpOnly: true,
     maxAge: Date.now() + 24 * 3600 * 1000,
-    secure: process.env.NODE_ENV === 'production',
+    // secure: process.env.NODE_ENV === 'production',
+    secure: false,
   };
 
   res.cookie('token', token, cookieOptions);
@@ -58,6 +59,7 @@ exports.signup = catchAsync(async (req, res, next) => {
     lastname: req.body.lastname,
     email: req.body.email,
     password: req.body.password,
+    city: req.body.city,
   });
 
   await createAndSendJWT(newUser, res, 201);
@@ -245,4 +247,12 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
   await user.save();
 
   await createAndSendJWT(user, res, 200);
+});
+
+exports.restrictToAdmin = catchAsync(async (req, res, next) => {
+  const user = await User.findById(req.user._id).select('+isAdmin');
+
+  if (!user.isAdmin)
+    return next(new AppError("You can't access this route", 403));
+  next();
 });
