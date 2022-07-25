@@ -10,9 +10,9 @@ const {
 
 const router = express.Router();
 
-router.use(protect);
 router.route('/').get(getAllCities);
 
+router.use(protect);
 router.use(restrictToAdmin);
 router.route('/').post(createCity);
 router.route('/:id').patch(updateCity).delete(deleteCity);
