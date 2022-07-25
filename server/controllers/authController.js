@@ -60,6 +60,7 @@ exports.signup = catchAsync(async (req, res, next) => {
     email: req.body.email,
     password: req.body.password,
     city: req.body.city,
+    neighborhood: req.body.neighborhood,
   });
 
   await createAndSendJWT(newUser, res, 201);
@@ -75,7 +76,6 @@ exports.login = catchAsync(async (req, res, next) => {
   if (!user) return next(new AppError('Wrong email or password', 400));
 
   // check password
-
   const passwordChecked = await bcrypt.compare(password, user.password);
 
   if (!passwordChecked)
@@ -111,7 +111,7 @@ exports.protect = catchAsync(async (req, res, next) => {
     );
 
   // check if user still exist
-  const user = await User.findOne({ _id: decoded.userId });
+  const user = await User.findById(decoded.userId).select('+isAdmin');
   if (!user)
     return next(
       new AppError('This user does not exist, please login to continue', 401)
@@ -235,7 +235,7 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
       new AppError('Please provide your current and new password', 400)
     );
 
-  const user = await User.findById({ _id: req.user._id }).select('+password');
+  const user = await User.findById(req.user._id).select('+password');
 
   const passwordChecked = await bcrypt.compare(currentPassword, user.password);
 
@@ -250,9 +250,7 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
 });
 
 exports.restrictToAdmin = catchAsync(async (req, res, next) => {
-  const user = await User.findById(req.user._id).select('+isAdmin');
-
-  if (!user.isAdmin)
+  if (!req.user.isAdmin)
     return next(new AppError("You can't access this route", 403));
   next();
 });
