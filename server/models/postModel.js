@@ -10,6 +10,7 @@ const postSchema = new mongoose.Schema(
     content: {
       type: String,
       required: [true, 'Post must have content'],
+      minLength: 1,
     },
 
     postType: {
