@@ -9,6 +9,7 @@ const neighborhoodSchema = new mongoose.Schema({
   city: {
     type: mongoose.Schema.ObjectId,
     ref: 'City',
+    required: [true, 'Neighborhood must belong to a city'],
   },
 });
 

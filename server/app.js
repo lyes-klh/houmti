@@ -2,6 +2,7 @@ const express = require('express');
 const morgan = require('morgan');
 const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
+const mongoSanitize = require('express-mongo-sanitize');
 
 const postsRouter = require('./routes/postsRouter');
 const usersRouter = require('./routes/usersRouter');
@@ -13,6 +14,7 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 app.use(helmet());
+app.use(mongoSanitize());
 app.use(morgan('dev'));
 
 app.use('/api/v1/posts', postsRouter);
