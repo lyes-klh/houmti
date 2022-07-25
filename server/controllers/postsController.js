@@ -5,10 +5,9 @@ const AppError = require('../utils/AppError');
 const APIFeatures = require('../utils/APIFeatures');
 
 exports.getAllPosts = catchAsync(async (req, res, next) => {
-  const user = await User.findById(req.user._id).select('+isAdmin');
   let initialQueryOption = {};
 
-  if (!user.isAdmin) {
+  if (!req.user.isAdmin) {
     // Only search posts for the user's city or neighborhood
     if (req.user.neighborhood)
       initialQueryOption = { neighborhood: req.user.neighborhood };
@@ -22,7 +21,7 @@ exports.getAllPosts = catchAsync(async (req, res, next) => {
     .paginate();
   posts = await posts.DBQuery;
 
-  res.status(201).json({
+  res.status(200).json({
     status: 'success',
     data: posts,
   });
@@ -98,11 +97,10 @@ exports.getPost = catchAsync(async (req, res, next) => {
 
 exports.updatePost = catchAsync(async (req, res, next) => {
   const post = await Post.findById(req.params.id);
-
   if (!post) return next(new AppError('This post does not exist', 400));
 
   if (!post.creator.equals(req.user._id))
-    return next(new AppError("You can't edit this post", 401));
+    return next(new AppError("You can't edit this post", 403));
 
   postBodySanitization(post.postType, req.body);
   req.body.postType = undefined;
@@ -124,18 +122,15 @@ exports.updatePost = catchAsync(async (req, res, next) => {
 
 exports.deletePost = catchAsync(async (req, res, next) => {
   const post = await Post.findById(req.params.id);
-
   if (!post) return next(new AppError('This post does not exist', 400));
 
-  const user = await User.findById(req.user._id).select('+isAdmin');
-
-  if (!user.isAdmin)
+  if (!req.user.isAdmin)
     if (!post.creator.equals(req.user._id))
-      return next(new AppError("You can't delete this post", 401));
+      return next(new AppError("You can't delete this post", 403));
 
   await Post.findByIdAndDelete(post._id);
 
-  res.status(200).json({
+  res.status(204).json({
     status: 'success',
     data: {
       message: 'Post deleted successfully',

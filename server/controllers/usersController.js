@@ -29,7 +29,7 @@ exports.getUserInfo = catchAsync(async (req, res, next) => {
 
 exports.updateMe = catchAsync(async (req, res, next) => {
   // check if city or neighborhood really exists (we assume we have their ids)
-  // if id format is not good, a CastError will be thrown by finById, else it will search
+  // if id format is not good, a CastError will be thrown by mongoose, else it will search
 
   const { city, neighborhood } = req.body;
   if (city) {
@@ -64,10 +64,7 @@ exports.updateMe = catchAsync(async (req, res, next) => {
 });
 
 exports.getAllUsers = catchAsync(async (req, res, next) => {
-  let users = new APIFeatures(
-    User.find().select('+password +banned +isAdmin'),
-    req.query
-  )
+  let users = new APIFeatures(User.find().select('+banned +isAdmin'), req.query)
     .filter()
     .sort()
     .project()
@@ -90,7 +87,6 @@ exports.updateAnyUser = catchAsync(async (req, res, next) => {
   // these fields need validation and pre middlware
   if (req.body.password) user.password = req.body.password;
   if (req.body.email) user.email = req.body.email;
-
   await user.save();
 
   req.body.password = undefined;
@@ -101,7 +97,7 @@ exports.updateAnyUser = catchAsync(async (req, res, next) => {
   req.body.resetToken = undefined;
   req.body.resetTokenExpires = undefined;
 
-  // rest of fields does not need validation
+  // rest of fields don't need validation
   const updatedUser = await User.findByIdAndUpdate(user._id, req.body, {
     new: true,
   });
@@ -126,7 +122,7 @@ exports.deleteAnyUser = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: 'success',
     data: {
-      message: 'Deleted',
+      message: 'User deleted successfully',
     },
   });
 });
