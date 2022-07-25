@@ -31,7 +31,24 @@ const userSchema = new mongoose.Schema({
     minLength: 8,
   },
 
+  city: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'City',
+    required: [true, 'User must be attched to a city'],
+  },
+
+  neighborhood: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'Neighborhood',
+  },
+
   banned: {
+    type: Boolean,
+    default: false,
+    select: false,
+  },
+
+  isAdmin: {
     type: Boolean,
     default: false,
     select: false,
