@@ -17,10 +17,15 @@ const feedbackSchema = new mongoose.Schema(
     feedbackType: {
       type: String,
       required: [true, 'Feedback must have a type'],
-      enum: ['Like', 'Comment'],
+      enum: ['Like', 'Comment', 'Participation', 'Demand', 'Vote'],
     },
 
     commentContent: {
+      type: String,
+      minLength: 1,
+    },
+
+    votedOption: {
       type: String,
       minLength: 1,
     },

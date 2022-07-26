@@ -59,8 +59,16 @@ exports.createPost = catchAsync(async (req, res, next) => {
       )
     );
 
-  if ((postType === 'poll') & !req.body.pollOptions)
-    return next(new AppError('Please provide poll options (polOptions)', 400));
+  if (
+    (postType === 'poll') &
+    (!req.body.pollOptions || req.body.pollOptions.length < 2)
+  )
+    return next(
+      new AppError(
+        'Please provide an array of minimum 2 poll options (polOptions)',
+        400
+      )
+    );
 
   if ((postType === 'service') & !req.body.servicePhoneNumber)
     return next(
@@ -70,6 +78,8 @@ exports.createPost = catchAsync(async (req, res, next) => {
       )
     );
   postBodySanitization(postType, req.body);
+
+  console.log(req.body);
 
   const post = await Post.create({
     ...req.body,

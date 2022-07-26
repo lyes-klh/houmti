@@ -1,5 +1,18 @@
 const mongoose = require('mongoose');
 
+const pollOptionsSchema = new mongoose.Schema({
+  option: {
+    type: String,
+    required: [true, 'You must specify an option'],
+    minLength: 1,
+  },
+  votesCount: {
+    type: Number,
+    default: 0,
+    required: [true, 'Must specify the votes number'],
+  },
+});
+
 const postSchema = new mongoose.Schema(
   {
     title: {
@@ -45,12 +58,16 @@ const postSchema = new mongoose.Schema(
 
     servicePhoneNumber: String,
 
-    pollOptions: [
-      {
-        option: { type: String, require: [true, 'option must have a name'] },
-        votesCount: { type: Number, default: 0 },
+    pollOptions: {
+      type: [pollOptionsSchema],
+      validate: {
+        validator: (options) => {
+          if (options.length !== 0)
+            return options.length >= 2 && options.length <= 10;
+        },
+        message: () => 'Number of options must be between 2 and 10',
       },
-    ],
+    },
   },
   { timestamps: true }
 );
