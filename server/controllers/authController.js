@@ -61,6 +61,7 @@ exports.signup = catchAsync(async (req, res, next) => {
     password: req.body.password,
     city: req.body.city,
     neighborhood: req.body.neighborhood,
+    avatar: 'avatar-default.jpg',
   });
 
   await createAndSendJWT(newUser, res, 201);

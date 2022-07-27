@@ -4,6 +4,7 @@ const Neighborhood = require('../models/neighborhoodModel.js');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/AppError');
 const APIFeatures = require('../utils/APIFeatures');
+const multerConfig = require('../utils/multerConfig');
 
 exports.getUserInfo = catchAsync(async (req, res, next) => {
   user = await User.findById(req.params.id);
@@ -27,33 +28,35 @@ exports.getUserInfo = catchAsync(async (req, res, next) => {
   });
 });
 
+const upload = multerConfig('users', 2000000);
+exports.uploadAvatar = upload.single('avatar');
+
 exports.updateMe = catchAsync(async (req, res, next) => {
+  if (req.file) req.body.avatar = req.file.filename;
+  else req.body.avatar = undefined;
   // check if city or neighborhood really exists (we assume we have their ids)
   // if id format is not good, a CastError will be thrown by mongoose, else it will search
 
   const { city, neighborhood } = req.body;
   if (city) {
     const cityToUpdate = await City.findById(city);
-
     if (!cityToUpdate) req.body.city = undefined;
   }
   if (neighborhood) {
     const neighborhoodToUpdate = await Neighborhood.findById(neighborhood);
-    if (!neighborhoodToUpdate) {
-      req.body.neighborhood = undefined;
-    }
+    if (!neighborhoodToUpdate) req.body.neighborhood = undefined;
+    else req.body.city = neighborhoodToUpdate.city;
   }
 
-  const userUpdated = await User.findByIdAndUpdate(
-    req.user._id,
-    {
-      firstname: req.body.firstname,
-      lastname: req.body.lastname,
-      city: req.body.city,
-      neighborhood: req.body.neighborhood,
-    },
-    { new: true }
-  );
+  const user = await User.findById(req.user._id);
+
+  user.firstname = req.body.firstname || user.firstname;
+  user.lastname = req.body.lastname || user.lastname;
+  user.city = req.body.city || user.city;
+  user.neighborhood = req.body.neighborhood || user.neighborhood;
+  user.avatar = req.body.avatar || user.avatar;
+
+  const userUpdated = await user.save();
 
   res.status(200).json({
     status: 'success',

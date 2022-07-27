@@ -17,6 +17,7 @@ const {
   getAllUsers,
   updateAnyUser,
   deleteAnyUser,
+  uploadAvatar,
 } = require('../controllers/usersController');
 
 const router = express.Router();
@@ -31,7 +32,7 @@ router.post('/resetPassword/:token', resetPassword);
 router.use(protect);
 router.post('/updatePassword', updatePassword);
 router.get('/:id', getUserInfo);
-router.patch('/updateMe', updateMe);
+router.patch('/updateMe', uploadAvatar, updateMe);
 
 // Admin-only routes
 router.use(restrictToAdmin);

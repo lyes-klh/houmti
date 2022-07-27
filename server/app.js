@@ -3,6 +3,7 @@ const morgan = require('morgan');
 const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
 const mongoSanitize = require('express-mongo-sanitize');
+const path = require('path');
 
 const postsRouter = require('./routes/postsRouter');
 const usersRouter = require('./routes/usersRouter');
@@ -12,6 +13,7 @@ const globalErrorHandler = require('./controllers/globalErrorHandler');
 
 const app = express();
 
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 app.use(cookieParser());
 app.use(helmet());

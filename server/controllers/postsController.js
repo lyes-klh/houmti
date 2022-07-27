@@ -1,9 +1,9 @@
 const Post = require('../models/postModel');
 const Feedback = require('../models/feedbackModel');
-const User = require('../models/userModel');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/AppError');
 const APIFeatures = require('../utils/APIFeatures');
+const multerConfig = require('../utils/multerConfig');
 
 exports.getAllPosts = catchAsync(async (req, res, next) => {
   let initialQueryOption = {};
@@ -34,12 +34,11 @@ const postBodySanitization = (postType, body) => {
     body.eventDate = undefined;
     body.eventHour = undefined;
   }
-
-  if (postType !== 'poll') {
-    body.pollOptions = undefined;
-  }
-  if (postType !== 'service') {
-    body.servicePhoneNumber = undefined;
+  if (postType !== 'poll') body.pollOptions = undefined;
+  if (postType !== 'service') body.servicePhoneNumber = undefined;
+  if (postType !== 'post') {
+    body.image = undefined;
+    body.withImage = undefined;
   }
 };
 
@@ -116,21 +115,32 @@ exports.getPost = catchAsync(async (req, res, next) => {
   });
 });
 
+const upload = multerConfig('posts', 2000000);
+exports.uploadImage = upload.single('image');
+
 exports.updatePost = catchAsync(async (req, res, next) => {
   const post = await Post.findById(req.params.id);
-  if (!post) return next(new AppError('This post does not exist', 400));
+  if (!post) return next(new AppError('This post does not exist', 404));
 
   if (!post.creator.equals(req.user._id))
     return next(new AppError("You can't edit this post", 403));
 
+  let image = undefined;
+  if (req.file && post.postType === 'post' && post.withImage && !post.image)
+    image = req.file.filename;
+  else if (req.file)
+    return next(new AppError("You can't upload an image to this post", 400));
+
   postBodySanitization(post.postType, req.body);
   post.title = req.body.title || post.title;
   post.content = req.body.content || post.content;
-  post.eventAddress = req.body.eventAddress;
-  post.eventDate = req.body.eventDate;
-  post.eventHour = req.body.eventHour;
-  post.eventHour = req.body.eventHour;
-  post.servicePhoneNumber = req.body.servicePhoneNumber;
+  post.eventAddress = req.body.eventAddress || post.eventAddress;
+  post.eventDate = req.body.eventDate || post.eventDate;
+  post.eventHour = req.body.eventHour || post.eventHour;
+  post.eventHour = req.body.eventHour || post.eventHour;
+  post.servicePhoneNumber =
+    req.body.servicePhoneNumber || post.servicePhoneNumber;
+  post.image = image || post.image;
 
   const updatedPost = await post.save();
 

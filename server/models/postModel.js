@@ -51,6 +51,7 @@ const postSchema = new mongoose.Schema(
     },
 
     image: String,
+    withImage: Boolean,
 
     eventAddress: String,
     eventDate: Date,
