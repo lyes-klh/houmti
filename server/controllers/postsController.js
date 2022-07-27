@@ -1,4 +1,5 @@
 const Post = require('../models/postModel');
+const Feedback = require('../models/feedbackModel');
 const User = require('../models/userModel');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/AppError');
@@ -61,11 +62,13 @@ exports.createPost = catchAsync(async (req, res, next) => {
 
   if (
     (postType === 'poll') &
-    (!req.body.pollOptions || req.body.pollOptions.length < 2)
+    (!req.body.pollOptions ||
+      req.body.pollOptions.length < 2 ||
+      !req.body.pollOptions.every((i) => typeof i === 'string'))
   )
     return next(
       new AppError(
-        'Please provide an array of minimum 2 poll options (polOptions)',
+        'Please provide an array (of strings) of minimum 2 poll options (pollOptions)',
         400
       )
     );
@@ -79,7 +82,15 @@ exports.createPost = catchAsync(async (req, res, next) => {
     );
   postBodySanitization(postType, req.body);
 
-  console.log(req.body);
+  if (postType === 'poll') {
+    let pollOptions = [];
+    for (let i = 0; i < req.body.pollOptions.length; i++) {
+      const pollOption = {};
+      pollOption.option = req.body.pollOptions[i];
+      pollOptions.push(pollOption);
+    }
+    req.body.pollOptions = pollOptions;
+  }
 
   const post = await Post.create({
     ...req.body,
@@ -113,16 +124,15 @@ exports.updatePost = catchAsync(async (req, res, next) => {
     return next(new AppError("You can't edit this post", 403));
 
   postBodySanitization(post.postType, req.body);
-  req.body.postType = undefined;
-  req.body.creator = undefined;
-  req.body.city = undefined;
-  req.body.neighborhood = undefined;
-  req.body.createdAt = undefined;
-  req.body.updateddAt = undefined;
+  post.title = req.body.title || post.title;
+  post.content = req.body.content || post.content;
+  post.eventAddress = req.body.eventAddress;
+  post.eventDate = req.body.eventDate;
+  post.eventHour = req.body.eventHour;
+  post.eventHour = req.body.eventHour;
+  post.servicePhoneNumber = req.body.servicePhoneNumber;
 
-  const updatedPost = await Post.findByIdAndUpdate(post._id, req.body, {
-    new: true,
-  });
+  const updatedPost = await post.save();
 
   res.status(200).json({
     status: 'success',
@@ -139,6 +149,7 @@ exports.deletePost = catchAsync(async (req, res, next) => {
       return next(new AppError("You can't delete this post", 403));
 
   await Post.findByIdAndDelete(post._id);
+  await Feedback.deleteMany({ post: post._id });
 
   res.status(204).json({
     status: 'success',

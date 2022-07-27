@@ -17,7 +17,7 @@ const postSchema = new mongoose.Schema(
   {
     title: {
       type: String,
-      minLength: 3,
+      minLength: 1,
     },
 
     content: {
