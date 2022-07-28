@@ -31,6 +31,11 @@ const notificationSchema = new mongoose.Schema(
       enum: ['create', 'update'],
       required: [true, 'Notification must have a type'],
     },
+
+    isRead: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,

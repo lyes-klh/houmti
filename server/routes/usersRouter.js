@@ -18,8 +18,9 @@ const {
   updateAnyUser,
   deleteAnyUser,
   uploadAvatar,
-  getUserNotifications,
 } = require('../controllers/usersController');
+
+const notificationsRouter = require('../routes/notificationsRouter');
 
 const router = express.Router();
 
@@ -31,10 +32,10 @@ router.post('/resetPassword/:token', resetPassword);
 
 // Protected routes
 router.use(protect);
-router.get('/notifications', getUserNotifications);
-router.post('/updatePassword', updatePassword);
+router.use('my-profile/notifications', notificationsRouter);
+router.post('my-profile/updatePassword', updatePassword);
+router.patch('my-profile/updateMe', uploadAvatar, updateMe);
 router.get('/:id', getUserInfo);
-router.patch('/updateMe', uploadAvatar, updateMe);
 
 // Admin-only routes
 router.use(restrictToAdmin);

@@ -31,28 +31,6 @@ exports.getUserInfo = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.getUserNotifications = catchAsync(async (req, res, next) => {
-  let notifications = new APIFeatures(
-    Notification.find({ notifier: req.user._id }),
-    req.query
-  )
-    .filter()
-    .project()
-    .sort()
-    .paginate();
-
-  notifications = await notifications.DBQuery;
-
-  // const message = ``
-
-  res.status(200).json({
-    status: 'success',
-    data: {
-      notifications,
-    },
-  });
-});
-
 const upload = multerConfig('users', 2000000);
 exports.uploadAvatar = upload.single('avatar');
 
