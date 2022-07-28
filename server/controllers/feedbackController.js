@@ -1,5 +1,5 @@
 const Feedback = require('../models/feedbackModel');
-const User = require('../models/userModel');
+const Notification = require('../models/notificationModel');
 const Post = require('../models/postModel');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/AppError');
@@ -27,10 +27,8 @@ exports.getAllPostFeedback = catchAsync(async (req, res, next) => {
 });
 
 const feedbackBodySanitization = (feedbackType, body) => {
-  console.log(body);
   if (feedbackType !== 'Comment') body.commentContent = undefined;
   if (feedbackType !== 'Vote') body.voteOption = undefined;
-  console.log(body);
 };
 
 const isValidFeedback = (feedbackType, postType) => {
@@ -118,6 +116,7 @@ exports.createFeedback = catchAsync(async (req, res, next) => {
       return next(new AppError('This vote option does not exist', 400));
   }
 
+  // create feedback
   const feedback = await Feedback.create({
     user: req.user._id,
     post: post._id,
@@ -126,7 +125,19 @@ exports.createFeedback = catchAsync(async (req, res, next) => {
     votedOption: req.body.voteOption,
   });
 
+  // Save new votesCount (if feedback is vote)
   await post.save();
+
+  // create notification to notify user
+  if (!req.user._id.equals(post.creator)) {
+    await Notification.create({
+      actor: req.user._id,
+      notifier: post.creator,
+      post: post._id,
+      feedback: feedback._id,
+      notificationType: 'create',
+    });
+  }
 
   res.status(201).json({
     status: 'success',
@@ -171,12 +182,22 @@ exports.updateFeedback = catchAsync(async (req, res, next) => {
     feedback.commentContent = req.body.commentContent;
   }
 
-  const updatedComment = await feedback.save();
-  const updatedPost = await post.save();
+  const updtaedFeedback = await feedback.save();
+  await post.save();
+
+  if (!req.user._id.equals(post.creator)) {
+    await Notification.create({
+      actor: req.user._id,
+      notifier: post.creator,
+      post: post._id,
+      feedback: feedback._id,
+      notificationType: 'update',
+    });
+  }
 
   res.status(201).json({
     status: 'success',
-    data: updatedComment,
+    data: updtaedFeedback,
   });
 });
 
@@ -194,6 +215,7 @@ exports.deleteFeedback = catchAsync(async (req, res, next) => {
   decrementOptionCount(post, feedback);
 
   await Feedback.findByIdAndDelete(feedback._id);
+  await Notification.deleteMany({ feedback: feedback._id });
   await post.save();
 
   res.status(204).json({

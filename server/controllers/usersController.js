@@ -1,6 +1,9 @@
 const User = require('../models/userModel.js');
 const City = require('../models/cityModel.js');
 const Neighborhood = require('../models/neighborhoodModel.js');
+const Notification = require('../models/notificationModel');
+const Post = require('../models/postModel');
+const Feedback = require('../models/feedbackModel');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/AppError');
 const APIFeatures = require('../utils/APIFeatures');
@@ -24,6 +27,28 @@ exports.getUserInfo = catchAsync(async (req, res, next) => {
     status: 'success',
     data: {
       user: userInfo,
+    },
+  });
+});
+
+exports.getUserNotifications = catchAsync(async (req, res, next) => {
+  let notifications = new APIFeatures(
+    Notification.find({ notifier: req.user._id }),
+    req.query
+  )
+    .filter()
+    .project()
+    .sort()
+    .paginate();
+
+  notifications = await notifications.DBQuery;
+
+  // const message = ``
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      notifications,
     },
   });
 });
@@ -121,6 +146,14 @@ exports.deleteAnyUser = catchAsync(async (req, res, next) => {
     return next(new AppError("You can't perform this action", 403));
 
   await User.findByIdAndDelete(user._id);
+
+  // Delete all posts
+  // Delete all feedbacks
+  // Delete all notifications
+  await Post.deleteMany({ creator: user._id });
+  await Feedback.deleteMany({ user: user.Id });
+  await Notification.deleteMany({ actor: user._id });
+  await Notification.deleteMany({ notifier: user._id });
 
   res.status(200).json({
     status: 'success',

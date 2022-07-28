@@ -18,6 +18,7 @@ const {
   updateAnyUser,
   deleteAnyUser,
   uploadAvatar,
+  getUserNotifications,
 } = require('../controllers/usersController');
 
 const router = express.Router();
@@ -30,6 +31,7 @@ router.post('/resetPassword/:token', resetPassword);
 
 // Protected routes
 router.use(protect);
+router.get('/notifications', getUserNotifications);
 router.post('/updatePassword', updatePassword);
 router.get('/:id', getUserInfo);
 router.patch('/updateMe', uploadAvatar, updateMe);
