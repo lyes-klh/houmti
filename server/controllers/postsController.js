@@ -29,6 +29,9 @@ exports.getAllPosts = catchAsync(async (req, res, next) => {
 });
 
 const postBodySanitization = (postType, body) => {
+  body.participationsCount = undefined;
+  body.demandsCount = undefined;
+
   if (postType !== 'event') {
     body.eventAddress = undefined;
     body.eventDate = undefined;
@@ -36,6 +39,7 @@ const postBodySanitization = (postType, body) => {
   }
   if (postType !== 'poll') body.pollOptions = undefined;
   if (postType !== 'service') body.servicePhoneNumber = undefined;
+
   if (postType !== 'post') {
     body.image = undefined;
     body.withImage = undefined;
@@ -106,8 +110,13 @@ exports.createPost = catchAsync(async (req, res, next) => {
 
 exports.getPost = catchAsync(async (req, res, next) => {
   const post = await Post.findById(req.params.id);
-
   if (!post) return next(new AppError('This post does not exist', 400));
+
+  if (
+    post.city !== req.user.city &&
+    post.neighborhood !== req.user.neighborhood
+  )
+    return next(new AppError('This post is not available for you', 400));
 
   res.status(200).json({
     status: 'success',
@@ -154,9 +163,8 @@ exports.deletePost = catchAsync(async (req, res, next) => {
   const post = await Post.findById(req.params.id);
   if (!post) return next(new AppError('This post does not exist', 400));
 
-  if (!req.user.isAdmin)
-    if (!post.creator.equals(req.user._id))
-      return next(new AppError("You can't delete this post", 403));
+  if (!req.user.isAdmin && !post.creator.equals(req.user._id))
+    return next(new AppError("You can't delete this post", 403));
 
   await Post.findByIdAndDelete(post._id);
   await Feedback.deleteMany({ post: post._id });

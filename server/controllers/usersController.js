@@ -31,7 +31,7 @@ exports.getUserInfo = catchAsync(async (req, res, next) => {
   });
 });
 
-const upload = multerConfig('users', 2000000);
+const upload = multerConfig('users', 4000000);
 exports.uploadAvatar = upload.single('avatar');
 
 exports.updateMe = catchAsync(async (req, res, next) => {

@@ -44,10 +44,10 @@ const createAndSendJWT = catchAsync(async (user, res, statusCode) => {
   // return response
   user.banned = undefined;
   user.password = undefined;
+  user.isAdmin = undefined;
 
   res.status(statusCode).json({
     status: 'success',
-    token,
     data: { message: 'logged in successfully', user },
   });
 });
@@ -230,6 +230,7 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
 });
 
 exports.updatePassword = catchAsync(async (req, res, next) => {
+  console.log('here');
   const { password: currentPassword, newPassword } = req.body;
   if (!currentPassword || !newPassword)
     return next(

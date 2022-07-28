@@ -114,7 +114,14 @@ exports.createFeedback = catchAsync(async (req, res, next) => {
     const isOption = isOptionInPost(post, req.body);
     if (!isOption)
       return next(new AppError('This vote option does not exist', 400));
-  }
+  } else if (req.body.feedbackType === 'Participate')
+    post.participationsCount = post.participationsCount + 1;
+  else if (req.body.feedbackType === 'Demand')
+    post.demandsCount = post.demandsCount + 1;
+  else if (req.body.feedbackType === 'Like')
+    post.likesCount = post.likesCount + 1;
+  else if (req.body.feedbackType === 'Comment')
+    post.commentsCount = post.commentsCount + 1;
 
   // create feedback
   const feedback = await Feedback.create({
@@ -168,13 +175,13 @@ exports.updateFeedback = catchAsync(async (req, res, next) => {
   if (feedback.feedbackType === 'Vote') {
     if (feedback.votedOption === req.body.voteOption)
       return next(new AppError('You already voted this option', 400));
-    // Check if option exist
-    // increment new in post
+    // Check if new option exists
+    // increment new option in post
     let isOptionExists = isOptionInPost(post, req.body);
     if (!isOptionExists)
       return next(new AppError('This vote option does not exist', 404));
 
-    // decrement old in post
+    // decrement old option in post
     // update feedback
     decrementOptionCount(post, feedback);
     feedback.votedOption = req.body.voteOption;
@@ -212,7 +219,15 @@ exports.deleteFeedback = catchAsync(async (req, res, next) => {
     return next(new AppError("You can't delete this feedback", 403));
 
   // If a feedback is a vote we decrement the option in post
-  decrementOptionCount(post, feedback);
+  if (feedback.feedbackType === 'Vote') decrementOptionCount(post, feedback);
+  else if (feedback.feedbackType === 'Participate')
+    post.participationsCount = post.participationsCount - 1;
+  else if (feedback.feedbackType === 'Demand')
+    post.demandsCount = post.demandsCount - 1;
+  else if (feedback.feedbackType === 'Comment')
+    post.commentsCount = post.commentsCount - 1;
+  else if (feedback.feedbackType === 'Like')
+    post.likesCount = post.likesCount - 1;
 
   await Feedback.findByIdAndDelete(feedback._id);
   await Notification.deleteMany({ feedback: feedback._id });

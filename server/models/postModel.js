@@ -50,14 +50,29 @@ const postSchema = new mongoose.Schema(
       ref: 'Neighborhood',
     },
 
+    likesCount: {
+      type: Number,
+      default: 0,
+    },
+
+    commentsCount: {
+      type: Number,
+      default: 0,
+    },
+
     image: String,
-    withImage: Boolean,
+    withImage: {
+      type: Boolean,
+      default: false,
+    },
 
     eventAddress: String,
     eventDate: Date,
     eventHour: String,
+    participationsCount: Number,
 
     servicePhoneNumber: String,
+    demandsCount: Number,
 
     pollOptions: {
       type: [pollOptionsSchema],
@@ -72,5 +87,14 @@ const postSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+postSchema.pre('save', function (next) {
+  if (this.isNew) {
+    if (this.postType === 'event') this.participationsCount = 0;
+    else if (this.postType === 'service') this.demandsCount = 0;
+  }
+
+  next();
+});
 
 module.exports = mongoose.model('Post', postSchema);

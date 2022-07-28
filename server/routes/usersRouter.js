@@ -32,9 +32,9 @@ router.post('/resetPassword/:token', resetPassword);
 
 // Protected routes
 router.use(protect);
-router.use('my-profile/notifications', notificationsRouter);
-router.post('my-profile/updatePassword', updatePassword);
-router.patch('my-profile/updateMe', uploadAvatar, updateMe);
+router.use('/my-profile/notifications', notificationsRouter);
+router.post('/my-profile/updatePassword', updatePassword);
+router.patch('/my-profile/updateMe', uploadAvatar, updateMe);
 router.get('/:id', getUserInfo);
 
 // Admin-only routes
