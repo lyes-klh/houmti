@@ -1366,5 +1366,3 @@ URL: {{URL}}/api/v1/users/notifications
 ---
 
 [Back to top](#houmti-mern)
-
-> Generated at 2022-07-28 23:39:08 by [docgen](https://github.com/thedevsaddam/docgen)
