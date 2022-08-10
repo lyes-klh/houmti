@@ -1,10 +1,13 @@
 import React from 'react';
-import { Box } from '@chakra-ui/react';
+import { Box, Heading, Text } from '@chakra-ui/react';
 
-const PostContent = () => {
+const PostContent = ({ title, content }) => {
   return (
     <Box mb={2} px={4}>
-      This is a post !
+      <Heading size='md' mb={2}>
+        {title}
+      </Heading>
+      <Text>{content}</Text>
     </Box>
   );
 };

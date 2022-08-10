@@ -97,4 +97,12 @@ postSchema.pre('save', function (next) {
   next();
 });
 
+postSchema.pre(/^find/, function (next) {
+  this.populate('creator', 'firstname lastname avatar')
+    .populate('city', 'cityName')
+    .populate('neighborhood', 'neighborhoodName');
+
+  next();
+});
+
 module.exports = mongoose.model('Post', postSchema);

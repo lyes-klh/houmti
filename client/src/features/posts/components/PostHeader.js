@@ -1,16 +1,32 @@
 import React from 'react';
-import { Box, Avatar, Stack, Heading, Text } from '@chakra-ui/react';
+import { formatRelative } from 'date-fns';
+import {
+  Avatar,
+  Stack,
+  Heading,
+  Text,
+  useColorModeValue,
+} from '@chakra-ui/react';
 
-const PostHeader = () => {
+const PostHeader = ({ creator, createdAt, city, neighborhood }) => {
   return (
     <Stack direction='row' spacing={2} mb={3} px={4}>
-      <Avatar size='md' name='Kent Dodds' src='https://bit.ly/kent-c-dodds' />
+      <Avatar
+        size='md'
+        name={`${creator.firstname} ${creator.lastname}`}
+        src={creator.avatar}
+      />
       <Stack direction='column' spacing={0} justifyContent='center'>
         <Heading size='sm' letterSpacing='wide'>
-          Kent Dodds
+          {`${creator.firstname} ${creator.lastname}`}
         </Heading>
-        <Text color='gray.400' fontSize='xs' lineHeight='short'>
-          17h
+        <Text
+          color={useColorModeValue('gray.600', 'gray.400')}
+          fontSize='xs'
+          lineHeight='short'
+        >
+          {formatRelative(new Date(createdAt), new Date())} &bull; {city} &bull;{' '}
+          {neighborhood}
         </Text>
       </Stack>
     </Stack>

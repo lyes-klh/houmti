@@ -1,0 +1,203 @@
+{
+    "status": "success",
+    "data": [
+        {
+            "_id": "62f3658e5e3cdb0943f97d8b",
+            "title": "Service",
+            "content": "I'm offering this service...",
+            "postType": "service",
+            "creator": {
+                "_id": "62f365295e3cdb0943f97d7c",
+                "firstname": "John",
+                "lastname": "Doe",
+                "avatar": "avatar-default.jpg"
+            },
+            "city": {
+                "_id": "62db957ed9e33a9e750ccbd0",
+                "cityName": "Baghlia"
+            },
+            "neighborhood": {
+                "_id": "62dea51813f192da9c9612a6",
+                "neighborhoodName": "Colonel Amirouche"
+            },
+            "likesCount": 0,
+            "commentsCount": 0,
+            "withImage": false,
+            "servicePhoneNumber": "0770000000",
+            "demandsCount": 0,
+            "pollOptions": [],
+            "createdAt": "2022-08-10T08:00:14.940Z",
+            "updatedAt": "2022-08-10T08:00:14.940Z"
+        },
+        {
+            "_id": "62f365845e3cdb0943f97d85",
+            "title": "Poll",
+            "content": "Please vote...",
+            "postType": "poll",
+            "creator": {
+                "_id": "62f365295e3cdb0943f97d7c",
+                "firstname": "John",
+                "lastname": "Doe",
+                "avatar": "avatar-default.jpg"
+            },
+            "city": {
+                "_id": "62db957ed9e33a9e750ccbd0",
+                "cityName": "Baghlia"
+            },
+            "neighborhood": {
+                "_id": "62dea51813f192da9c9612a6",
+                "neighborhoodName": "Colonel Amirouche"
+            },
+            "likesCount": 0,
+            "commentsCount": 0,
+            "withImage": false,
+            "pollOptions": [
+                {
+                    "option": "opt1",
+                    "votesCount": 0,
+                    "_id": "62f365845e3cdb0943f97d86"
+                },
+                {
+                    "option": "opt2",
+                    "votesCount": 0,
+                    "_id": "62f365845e3cdb0943f97d87"
+                },
+                {
+                    "option": "opt3",
+                    "votesCount": 0,
+                    "_id": "62f365845e3cdb0943f97d88"
+                }
+            ],
+            "createdAt": "2022-08-10T08:00:04.987Z",
+            "updatedAt": "2022-08-10T08:00:04.987Z"
+        },
+        {
+            "_id": "62f365785e3cdb0943f97d82",
+            "title": "Event",
+            "content": "Let's meet !",
+            "postType": "event",
+            "creator": {
+                "_id": "62f365295e3cdb0943f97d7c",
+                "firstname": "John",
+                "lastname": "Doe",
+                "avatar": "avatar-default.jpg"
+            },
+            "city": {
+                "_id": "62db957ed9e33a9e750ccbd0",
+                "cityName": "Baghlia"
+            },
+            "neighborhood": {
+                "_id": "62dea51813f192da9c9612a6",
+                "neighborhoodName": "Colonel Amirouche"
+            },
+            "likesCount": 0,
+            "commentsCount": 0,
+            "withImage": false,
+            "eventAddress": "Area 51",
+            "eventDate": "2022-08-10T07:59:52.550Z",
+            "eventHour": "2PM",
+            "participationsCount": 0,
+            "pollOptions": [],
+            "createdAt": "2022-08-10T07:59:52.580Z",
+            "updatedAt": "2022-08-10T07:59:52.580Z"
+        },
+        {
+            "_id": "62f365645e3cdb0943f97d7f",
+            "title": "Post",
+            "content": "hello world",
+            "postType": "post",
+            "creator": {
+                "_id": "62f365295e3cdb0943f97d7c",
+                "firstname": "John",
+                "lastname": "Doe",
+                "avatar": "avatar-default.jpg"
+            },
+            "city": {
+                "_id": "62db957ed9e33a9e750ccbd0",
+                "cityName": "Baghlia"
+            },
+            "neighborhood": {
+                "_id": "62dea51813f192da9c9612a6",
+                "neighborhoodName": "Colonel Amirouche"
+            },
+            "likesCount": 0,
+            "commentsCount": 0,
+            "withImage": false,
+            "pollOptions": [],
+            "createdAt": "2022-08-10T07:59:32.861Z",
+            "updatedAt": "2022-08-10T07:59:32.861Z"
+        },
+        {
+            "_id": "62e2fce0d183dce2bf26e5ed",
+            "title": "Poll",
+            "content": "Please vote...",
+            "postType": "poll",
+            "creator": {
+                "_id": "62e2da68b2617f714d3383b2",
+                "firstname": "admin",
+                "lastname": "admin",
+                "avatar": "avatar-default.jpg"
+            },
+            "city": {
+                "_id": "62db957ed9e33a9e750ccbd0",
+                "cityName": "Baghlia"
+            },
+            "neighborhood": {
+                "_id": "62dea51813f192da9c9612a6",
+                "neighborhoodName": "Colonel Amirouche"
+            },
+            "likesCount": 1,
+            "commentsCount": 0,
+            "withImage": false,
+            "pollOptions": [
+                {
+                    "option": "opt1",
+                    "votesCount": 0,
+                    "_id": "62e2fce0d183dce2bf26e5ee"
+                },
+                {
+                    "option": "opt2",
+                    "votesCount": 1,
+                    "_id": "62e2fce0d183dce2bf26e5ef"
+                },
+                {
+                    "option": "opt3",
+                    "votesCount": 0,
+                    "_id": "62e2fce0d183dce2bf26e5f0"
+                }
+            ],
+            "createdAt": "2022-07-28T21:17:20.787Z",
+            "updatedAt": "2022-07-28T21:25:16.633Z"
+        },
+        {
+            "_id": "62e2fb68d183dce2bf26e5e4",
+            "title": "Event",
+            "content": "Let's meet !",
+            "postType": "event",
+            "creator": {
+                "_id": "62e2da68b2617f714d3383b2",
+                "firstname": "admin",
+                "lastname": "admin",
+                "avatar": "avatar-default.jpg"
+            },
+            "city": {
+                "_id": "62db957ed9e33a9e750ccbd0",
+                "cityName": "Baghlia"
+            },
+            "neighborhood": {
+                "_id": "62dea51813f192da9c9612a6",
+                "neighborhoodName": "Colonel Amirouche"
+            },
+            "likesCount": 0,
+            "commentsCount": 0,
+            "withImage": false,
+            "eventAddress": "Area 51",
+            "eventDate": "2022-07-28T21:11:04.761Z",
+            "eventHour": "2PM",
+            "participationsCount": 1,
+            "pollOptions": [],
+            "createdAt": "2022-07-28T21:11:04.798Z",
+            "updatedAt": "2022-07-28T21:11:16.589Z"
+        }
+    ]
+}

@@ -1,6 +1,5 @@
 import React from 'react';
-import { Box, Button, Stack, Icon } from '@chakra-ui/react';
-import { BiLike, BiComment } from 'react-icons/bi';
+import { Button, Stack, Icon, useColorModeValue } from '@chakra-ui/react';
 import { FiThumbsUp, FiMessageSquare } from 'react-icons/fi';
 
 const FeedbackActions = ({ openComment }) => {
@@ -10,16 +9,16 @@ const FeedbackActions = ({ openComment }) => {
       <Button
         w='50%'
         variant='ghost'
-        color='gray.500'
+        color={useColorModeValue('gray.600', 'gray.500')}
         size='sm'
-        leftIcon={<Icon as={FiThumbsUp} fontSize='xl' />}
+        leftIcon={<Icon as={FiThumbsUp} fontSize='xl' rotate={1} />}
       >
         Like
       </Button>
       <Button
         w='50%'
         variant='ghost'
-        color='gray.500'
+        color={useColorModeValue('gray.600', 'gray.500')}
         size='sm'
         onClick={handleComment}
         leftIcon={

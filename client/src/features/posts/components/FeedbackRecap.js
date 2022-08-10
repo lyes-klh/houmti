@@ -1,7 +1,7 @@
 import React from 'react';
-import { Flex, Text } from '@chakra-ui/react';
+import { Flex, Text, useColorModeValue } from '@chakra-ui/react';
 
-const FeedbackRecap = ({ likes, comments }) => {
+const FeedbackRecap = ({ likesCount, commentsCount }) => {
   return (
     <Flex
       justify='space-between'
@@ -10,12 +10,12 @@ const FeedbackRecap = ({ likes, comments }) => {
       fontSize='sm'
       letterSpacing='wider'
     >
-      <Text color='gray.400' ml={1}>
-        {likes} Likes
+      <Text color={useColorModeValue('gray.600', 'gray.400')} ml={1}>
+        {likesCount} Likes
       </Text>
 
-      <Text color='gray.400' ml={1}>
-        {comments} Comments
+      <Text color={useColorModeValue('gray.600', 'gray.400')} ml={1}>
+        {commentsCount} Comments
       </Text>
     </Flex>
   );

@@ -4,11 +4,11 @@ import FeedbackRecap from './FeedbackRecap';
 import FeedbackActions from './FeedbackActions';
 import CommentForm from './CommentForm';
 
-const Feedback = ({ likes, comments }) => {
+const Feedback = ({ likesCount, commentsCount }) => {
   const [commentIsOpen, setCommentIsOpen] = useState(false);
   return (
     <Box px={4}>
-      <FeedbackRecap likes={31} comments={42} />
+      <FeedbackRecap likesCount={likesCount} commentsCount={commentsCount} />
       <Divider />
       <FeedbackActions openComment={setCommentIsOpen} />
       {commentIsOpen && <CommentForm />}

@@ -5,7 +5,16 @@ const config = {
   useSystemColorMode: true,
 };
 
-const theme = extendTheme({ config });
+const semanticTokens = {
+  colors: {
+    'chakra-body-bg': {
+      _light: 'gray.200',
+      _dark: 'gray.800',
+    },
+  },
+};
+
+const theme = extendTheme({ config, semanticTokens });
 console.log(theme);
 
 export default theme;

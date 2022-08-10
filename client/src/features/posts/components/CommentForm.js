@@ -8,7 +8,7 @@ import {
   Input,
 } from '@chakra-ui/react';
 
-import avatar from '../../assets/images/avatar.jpg';
+import avatar from '../../../assets/images/avatar.jpg';
 
 const CommentForm = () => {
   return (
@@ -27,6 +27,7 @@ const CommentForm = () => {
         </Avatar>
         <Input
           variant='filled'
+          focusBorderColor='green.600'
           borderRadius='3xl'
           placeholder='Write a comment...'
         ></Input>

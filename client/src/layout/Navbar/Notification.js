@@ -1,5 +1,11 @@
 import React from 'react';
-import { Grid, GridItem, Avatar, Text } from '@chakra-ui/react';
+import {
+  Grid,
+  GridItem,
+  Avatar,
+  Text,
+  useColorModeValue,
+} from '@chakra-ui/react';
 
 const Notification = ({ content, image }) => {
   return (
@@ -7,10 +13,10 @@ const Notification = ({ content, image }) => {
       <Grid
         minH={12}
         templateColumns='repeat(6, 1fr)'
-        bg='gray.700'
+        bg={useColorModeValue('gray.100', 'gray.700')}
         borderRadius='sm'
-        p={4}
-        mb={3}
+        p={3}
+        mb={2}
         justifyContent='center'
         alignItems='center'
       >
