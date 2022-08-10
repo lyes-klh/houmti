@@ -12,7 +12,7 @@ function App() {
   return (
     <>
       <Navbar />
-      <Flex mx={8} justify='center' align='start'>
+      <Flex mx={{ md: 4, lg: 8 }} justify='center' align='start'>
         {isMedium && <VerticalNavbar />}
 
         <Home />
