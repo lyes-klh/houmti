@@ -2,13 +2,12 @@ import { Flex } from '@chakra-ui/react';
 import { useMediaQuery } from '@chakra-ui/react';
 
 import Navbar from './layout/Navbar/Navbar';
-import VerticalNavbar from './layout/VerticalNavbar/VerticalNavbar';
 import Home from './pages/Home';
 import SideContent from './layout/SideContent/SideContent';
 
 function App() {
   const [isMedium] = useMediaQuery('(min-width: 48rem)');
-  const [isLarge] = useMediaQuery('(min-width: 80rem)');
+  // const [isLarge] = useMediaQuery('(min-width: 80rem)');
   return (
     <>
       <Navbar />
@@ -19,7 +18,7 @@ function App() {
         position='relative'
       >
         <Home />
-        {/* {isLarge && <SideContent />} */}
+        {isMedium && <SideContent />}
       </Flex>
     </>
   );

@@ -72,7 +72,7 @@ const EventContent = ({
           direction='column'
           justify='center'
           align='center'
-          bgGradient='linear(to-br, green.300, green.900)'
+          bgGradient='linear(to-br, green.300, green.600)'
         >
           <Text>{day}</Text>
           <Text>{month}</Text>
@@ -80,7 +80,7 @@ const EventContent = ({
       </Flex>
 
       <Button leftIcon={<Icon as={FiCalendar} />} colorScheme='green'>
-        Participate in this event
+        Participate
       </Button>
     </Box>
   );

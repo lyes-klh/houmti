@@ -42,7 +42,7 @@ import Notification from './Notification';
 import avatar from '../../assets/images/avatar.jpg';
 
 const Navbar = () => {
-  const { isOpen, onOpen, onClose, onToggle } = useDisclosure();
+  const { isOpen, onToggle } = useDisclosure();
   const { colorMode, toggleColorMode } = useColorMode();
   const [isMedium] = useMediaQuery('(min-width: 48rem)');
 
@@ -132,7 +132,7 @@ const Navbar = () => {
             <PopoverContent
               bg={useColorModeValue('white', 'gray.900')}
               maxH='60vh'
-              overflow='scroll'
+              overflow='auto'
             >
               <PopoverHeader>Notifications</PopoverHeader>
               <PopoverBody py={4}>

@@ -38,7 +38,7 @@ const ServiceContent = ({ servicePhoneNumber, demandsCount }) => {
         </Stack>
       </Stack>
       <Button leftIcon={<Icon as={FiBriefcase} />} colorScheme='green'>
-        Demand this service
+        Demand service
       </Button>
     </Box>
   );

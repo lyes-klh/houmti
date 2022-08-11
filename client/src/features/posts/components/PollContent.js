@@ -51,7 +51,7 @@ const PollContent = ({ pollOptions }) => {
       </Stack>
 
       <Button leftIcon={<Icon as={FiBarChart2} />} colorScheme='green'>
-        Vote now
+        Vote
       </Button>
     </Box>
   );

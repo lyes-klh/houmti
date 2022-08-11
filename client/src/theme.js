@@ -14,7 +14,12 @@ const semanticTokens = {
   },
 };
 
-const theme = extendTheme({ config, semanticTokens });
+const fonts = {
+  heading: `'Roboto', sans-serif`,
+  body: `'Roboto', sans-serif`,
+};
+
+const theme = extendTheme({ config, semanticTokens, fonts });
 console.log(theme);
 
 export default theme;
