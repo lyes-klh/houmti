@@ -14,7 +14,7 @@ import image from '../../assets/images/avatar.jpg';
 
 const SideContent = () => {
   return (
-    <Flex direction='column' mt={24} ml={{ base: 6, lg: 16 }}>
+    <Flex direction='column' ml={{ base: 6, lg: 16 }}>
       <Stack
         borderRadius={4}
         w={{ base: '12rem', lg: '18rem' }}

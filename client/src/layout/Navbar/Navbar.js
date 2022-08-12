@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 import {
   useDisclosure,
@@ -79,27 +80,36 @@ const Navbar = () => {
         {/* Navigation - Large */}
         {isMedium && (
           <HStack>
-            <IconButton
-              aria-label='Home'
-              colorScheme='green'
-              variant='ghost'
-              size='lg'
-              icon={<Icon as={FiHome} fontSize='xl' />}
-            />
-            <IconButton
-              aria-label='Profile'
-              colorScheme='green'
-              variant='ghost'
-              size='lg'
-              icon={<Icon as={FiUser} fontSize='xl' />}
-            />
-            <IconButton
-              aria-label='Home'
-              colorScheme='green'
-              variant='ghost'
-              size='lg'
-              icon={<Icon as={FiSettings} fontSize='xl' />}
-            />
+            <Link to='/'>
+              <IconButton
+                aria-label='Home'
+                colorScheme='green'
+                variant='ghost'
+                size='lg'
+                icon={<Icon as={FiHome} fontSize='xl' />}
+              />
+            </Link>
+
+            <Link to='/profile'>
+              <IconButton
+                aria-label='Profile'
+                colorScheme='green'
+                variant='ghost'
+                size='lg'
+                icon={<Icon as={FiUser} fontSize='xl' />}
+              />
+            </Link>
+
+            <Link to='/settings'>
+              <IconButton
+                aria-label='Settings'
+                colorScheme='green'
+                variant='ghost'
+                size='lg'
+                icon={<Icon as={FiSettings} fontSize='xl' />}
+              />
+            </Link>
+
             <IconButton
               aria-label='Color mode'
               colorScheme='green'
@@ -147,7 +157,7 @@ const Navbar = () => {
               </PopoverBody>
             </PopoverContent>
           </Popover>
-          <Menu>
+          <Menu autoSelect={false}>
             <MenuButton borderRadius='full'>
               <Avatar
                 name='avatar'
@@ -156,23 +166,31 @@ const Navbar = () => {
               />
             </MenuButton>
             <MenuList bg={useColorModeValue('white', 'gray.900')}>
-              <MenuItem>
-                <Icon as={FiUser} mr={2} fontSize='lg' /> Profile
-              </MenuItem>
-              <MenuItem>
-                <Icon as={FiSettings} mr={2} fontSize='lg' /> Settings
-              </MenuItem>
-              <MenuItem onClick={toggleColorMode}>
-                <Icon
-                  as={colorMode === 'dark' ? FiSun : FiMoon}
-                  mr={2}
-                  fontSize='lg'
-                />{' '}
+              <Link to='/profile'>
+                <MenuItem icon={<Icon as={FiUser} mr={2} fontSize='lg' />}>
+                  Profile
+                </MenuItem>
+              </Link>
+              <Link to='/settings'>
+                <MenuItem icon={<Icon as={FiSettings} mr={2} fontSize='lg' />}>
+                  Settings
+                </MenuItem>
+              </Link>
+              <MenuItem
+                icon={
+                  <Icon
+                    as={colorMode === 'dark' ? FiSun : FiMoon}
+                    mr={2}
+                    fontSize='lg'
+                  />
+                }
+                onClick={toggleColorMode}
+              >
                 {colorMode === 'dark' ? 'Light mode' : 'Dark Mode'}
               </MenuItem>
               <Divider />
-              <MenuItem>
-                <Icon as={FiLogOut} mr={2} fontSize='lg' /> Log out
+              <MenuItem icon={<Icon as={FiLogOut} mr={2} fontSize='lg' />}>
+                Logout
               </MenuItem>
             </MenuList>
           </Menu>
@@ -181,11 +199,17 @@ const Navbar = () => {
 
       {isOpen && (
         <VStack mt={4} ml={2} spacing={4} alignItems='start'>
-          <NavLink icon={FiHome}>Home</NavLink>
+          <NavLink link='/' icon={FiHome}>
+            Home
+          </NavLink>
           <Divider />
-          <NavLink icon={FiUser}>Profile</NavLink>
+          <NavLink link='profile' icon={FiUser}>
+            Profile
+          </NavLink>
           <Divider />
-          <NavLink icon={FiSettings}>Settings</NavLink>
+          <NavLink link='settings' icon={FiSettings}>
+            Settings
+          </NavLink>
         </VStack>
       )}
     </Box>

@@ -1,26 +1,27 @@
-import { Flex } from '@chakra-ui/react';
-import { useMediaQuery } from '@chakra-ui/react';
-
 import Navbar from './layout/Navbar/Navbar';
 import Home from './pages/Home';
-import SideContent from './layout/SideContent/SideContent';
+import Login from './pages/Login';
+import Signup from './pages/Signup';
+import Profile from './pages/Profile';
+import Settings from './pages/Settings';
+import NotFound from './pages/NotFound';
+
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 function App() {
-  const [isMedium] = useMediaQuery('(min-width: 48rem)');
-  // const [isLarge] = useMediaQuery('(min-width: 80rem)');
   return (
-    <>
+    <Router>
       <Navbar />
-      <Flex
-        mx={{ md: 4, lg: 8 }}
-        justify='center'
-        align='start'
-        position='relative'
-      >
-        <Home />
-        {isMedium && <SideContent />}
-      </Flex>
-    </>
+      <Routes>
+        <Route path='/' element={<Home />} />
+        <Route path='/profile' element={<Profile />} />
+        <Route path='/settings' element={<Settings />} />
+        <Route path='/login' element={<Login />} />
+        <Route path='/signup' element={<Signup />} />
+        <Route path='/not-found' element={<NotFound />} />
+        <Route path='*' element={<NotFound />} />
+      </Routes>
+    </Router>
   );
 }
 
