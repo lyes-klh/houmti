@@ -5,8 +5,9 @@ const PageWrapper = ({ children }) => {
   return (
     <Flex
       mx={{ md: 4, lg: 8 }}
-      justify='center'
-      align='start'
+      direction='column'
+      justify='start'
+      align='center'
       position='relative'
       mt={24}
     >

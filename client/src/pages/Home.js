@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Flex, useMediaQuery } from '@chakra-ui/react';
-import PageWrapper from './PageWrapper';
 import { Post } from '../features/posts';
+import { CreatePost } from '../features/create';
 import SideContent from '../layout/SideContent/SideContent';
 
 // import image1 from '../assets/images/image-1.jpg';
@@ -13,20 +13,28 @@ const Home = () => {
   // const [isLarge] = useMediaQuery('(min-width: 80rem)');
 
   return (
-    <PageWrapper>
+    <Flex
+      mx={{ md: 4, lg: 8 }}
+      justify='center'
+      align='start'
+      position='relative'
+      mt={24}
+    >
       <Box
         as='main'
         width={{ base: '100%', sm: '30rem', md: '35rem', lg: '40rem' }}
         minH='100vh'
         borderRadius={4}
         w='full'
+        position='relative'
       >
+        <CreatePost />
         {posts.data.map((post) => (
           <Post key={post._id} post={post} />
         ))}
       </Box>
       {isMedium && <SideContent />}
-    </PageWrapper>
+    </Flex>
   );
 };
 

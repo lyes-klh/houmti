@@ -3,18 +3,24 @@ import {
   Flex,
   Stack,
   Box,
+  Icon,
   Avatar,
   Heading,
   Text,
   useColorModeValue,
 } from '@chakra-ui/react';
-import { Icon } from '@chakra-ui/react';
 import { FiMapPin } from 'react-icons/fi';
 import image from '../../assets/images/avatar.jpg';
 
 const SideContent = () => {
   return (
-    <Flex direction='column' ml={{ base: 6, lg: 16 }}>
+    <Flex
+      direction='column'
+      ml={{ base: 6, lg: 16 }}
+      // position='absolute'
+      // top={0}
+      // left='70%'
+    >
       <Stack
         borderRadius={4}
         w={{ base: '12rem', lg: '18rem' }}
