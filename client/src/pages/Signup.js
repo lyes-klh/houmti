@@ -1,8 +1,14 @@
 import React from 'react';
-import PageWrapper from './PageWrapper';
 
-const Signup = () => {
-  return <PageWrapper>Signup</PageWrapper>;
+import PageWrapper from './PageWrapper';
+import { SignupForm } from '../features/authentication';
+
+const Login = () => {
+  return (
+    <PageWrapper>
+      <SignupForm />
+    </PageWrapper>
+  );
 };
 
-export default Signup;
+export default Login;

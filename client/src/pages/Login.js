@@ -1,8 +1,14 @@
 import React from 'react';
+
 import PageWrapper from './PageWrapper';
+import { LoginForm } from '../features/authentication';
 
 const Login = () => {
-  return <PageWrapper>Login</PageWrapper>;
+  return (
+    <PageWrapper>
+      <LoginForm />
+    </PageWrapper>
+  );
 };
 
 export default Login;

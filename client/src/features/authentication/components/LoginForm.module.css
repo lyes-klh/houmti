@@ -1,0 +1,24 @@
+@keyframes rotation {
+	0% {
+		/* transform: translatey(0px); */
+    transform: rotate(-12deg)
+	}
+	50% {
+		/* transform: translatey(-20px); */
+    transform: rotate(12deg)
+
+	}
+	100% {
+		/* transform: translatey(0px); */
+    transform: rotate(-12deg)
+
+	}
+}
+
+.floating {
+  width: 200px;
+  height: 200px;
+  /* transform: translatey(0px); */
+  transform: rotate(-12deg);
+	animation: rotation 6s ease-in-out infinite;
+}
