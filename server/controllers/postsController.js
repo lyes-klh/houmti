@@ -28,6 +28,20 @@ exports.getAllPosts = catchAsync(async (req, res, next) => {
   });
 });
 
+exports.getMyPosts = catchAsync(async (req, res, next) => {
+  let posts = new APIFeatures(Post.find({ creator: req.user._id }), req.query)
+    .filter()
+    .sort()
+    .project()
+    .paginate();
+  posts = await posts.DBQuery;
+
+  res.status(200).json({
+    status: 'success',
+    data: posts,
+  });
+});
+
 const postBodySanitization = (postType, body) => {
   body.participationsCount = undefined;
   body.demandsCount = undefined;
@@ -95,12 +109,14 @@ exports.createPost = catchAsync(async (req, res, next) => {
     req.body.pollOptions = pollOptions;
   }
 
-  const post = await Post.create({
+  const createdPost = await Post.create({
     ...req.body,
     creator: req.user._id,
-    city: req.user.city,
-    neighborhood: req.user.neighborhood,
+    city: req.user.city._id,
+    neighborhood: req.user.neighborhood._id,
   });
+
+  const post = await Post.findById(createdPost._id);
 
   res.status(201).json({
     status: 'success',

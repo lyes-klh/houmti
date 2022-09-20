@@ -18,7 +18,12 @@ const Post = ({ post }) => {
         neighborhood={post.neighborhood.neighborhoodName}
       />
       <PostContent title={post.title} content={post.content} />
-      {post.withImage && <Image src={post.image} />}
+      {post.withImage && (
+        <Image
+          src={process.env.REACT_APP_BACKEND + '/img/posts/' + post.image}
+          w='full'
+        />
+      )}
       {post.postType === 'service' && (
         <ServiceContent
           servicePhoneNumber={post.servicePhoneNumber}

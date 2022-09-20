@@ -1,16 +1,39 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Flex, useMediaQuery } from '@chakra-ui/react';
 import { Post } from '../features/posts';
 import { CreatePost } from '../features/create';
 import SideContent from '../layout/SideContent/SideContent';
+import { PostSkeleton } from '../features/posts';
 
-// import image1 from '../assets/images/image-1.jpg';
-// import image2 from '../assets/images/image-2.jpg';
-import posts from '../data/posts';
+import { useDispatch, useSelector } from 'react-redux';
+import { getFeedPostsAction } from '../features/posts/postsActions';
+import { getFeedPosts } from '../features/posts/postsSlice';
 
 const Home = () => {
   const [isMedium] = useMediaQuery('(min-width: 48rem)');
   // const [isLarge] = useMediaQuery('(min-width: 80rem)');
+
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const res = await getFeedPostsAction();
+        dispatch(getFeedPosts(res.data));
+        setIsLoading(false);
+      } catch (e) {
+        setError(e);
+        setIsLoading(false);
+      }
+    };
+
+    fetchPosts();
+  }, [dispatch]);
+
+  const feedPosts = useSelector((state) => state.posts.feedPosts);
 
   return (
     <Flex
@@ -29,9 +52,17 @@ const Home = () => {
         position='relative'
       >
         <CreatePost />
-        {posts.data.map((post) => (
-          <Post key={post._id} post={post} />
-        ))}
+
+        {isLoading ? (
+          <>
+            <PostSkeleton />
+            <PostSkeleton />
+            <PostSkeleton />
+            <PostSkeleton />
+          </>
+        ) : (
+          feedPosts.map((post) => <Post key={post._id} post={post} />)
+        )}
       </Box>
       {isMedium && <SideContent />}
     </Flex>

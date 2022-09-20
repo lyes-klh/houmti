@@ -14,7 +14,7 @@ const PostHeader = ({ creator, createdAt, city, neighborhood }) => {
       <Avatar
         size='md'
         name={`${creator.firstname} ${creator.lastname}`}
-        src={creator.avatar}
+        src={process.env.REACT_APP_BACKEND + '/img/users/' + creator.avatar}
       />
       <Stack direction='column' spacing={0} justifyContent='center'>
         <Heading size='sm' letterSpacing='wide'>

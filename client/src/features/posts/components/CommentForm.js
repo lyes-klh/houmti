@@ -7,10 +7,11 @@ import {
   AvatarBadge,
   Input,
 } from '@chakra-ui/react';
-
-import avatar from '../../../assets/images/avatar.jpg';
+import { useSelector } from 'react-redux';
 
 const CommentForm = () => {
+  const currentUser = useSelector((state) => state.auth.currentUser);
+
   return (
     <Box my={2}>
       <Divider />
@@ -22,7 +23,13 @@ const CommentForm = () => {
         alignItems='center'
         spacing={4}
       >
-        <Avatar name='avatar' size='sm' src={avatar}>
+        <Avatar
+          size='sm'
+          name={currentUser.firstname + ' ' + currentUser.lastname}
+          src={
+            process.env.REACT_APP_BACKEND + '/img/users/' + currentUser.avatar
+          }
+        >
           <AvatarBadge boxSize='1.25em' bg='green.500' />
         </Avatar>
         <Input

@@ -11,8 +11,10 @@ import {
 } from '@chakra-ui/react';
 import { FiMapPin } from 'react-icons/fi';
 import image from '../../assets/images/avatar.jpg';
+import { useSelector } from 'react-redux';
 
 const SideContent = () => {
+  const currentUser = useSelector((state) => state.auth.currentUser);
   return (
     <Flex
       direction='column'
@@ -32,7 +34,12 @@ const SideContent = () => {
         spacing={2}
         alignItems='center'
       >
-        <Avatar name='Avatar' src={image} />
+        <Avatar
+          name={currentUser.firstname + ' ' + currentUser.lastname}
+          src={
+            process.env.REACT_APP_BACKEND + '/img/users/' + currentUser.avatar
+          }
+        />
         <Stack
           direction='column'
           spacing={1}
@@ -43,7 +50,7 @@ const SideContent = () => {
             letterSpacing='wide'
             textAlign={{ base: 'center', lg: 'left' }}
           >
-            {`Lyes Kellouche`}
+            {currentUser.firstname + ' ' + currentUser.lastname}
           </Heading>
           <Text
             color={useColorModeValue('gray.600', 'gray.400')}
@@ -58,7 +65,8 @@ const SideContent = () => {
               position='relative'
               top='3px'
             />
-            Baghlia &bull; Colonel Amirouche
+            {currentUser.city.cityName} &bull;{' '}
+            {currentUser.neighborhood.neighborhoodName}
           </Text>
         </Stack>
       </Stack>

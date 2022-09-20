@@ -1,13 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react';
 import PostForm from './PostForm';
 import EventForm from './EventForm';
 import PollForm from './PollForm';
 import ServiceForm from './ServiceForm';
 
-const CreateTabs = () => {
+const CreateTabs = ({ tabIndex, handleTabsChange }) => {
   return (
-    <Tabs colorScheme='green' isFitted isLazy variant='soft-rounded'>
+    <Tabs
+      colorScheme='green'
+      isFitted
+      isLazy
+      variant='soft-rounded'
+      index={tabIndex}
+      onChange={handleTabsChange}
+    >
       <TabList>
         <Tab>Post</Tab>
         <Tab>Event</Tab>

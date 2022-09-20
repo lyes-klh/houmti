@@ -22,6 +22,8 @@ const {
 
 const notificationsRouter = require('../routes/notificationsRouter');
 
+const { getMyPosts } = require('../controllers/postsController');
+
 const router = express.Router();
 
 router.post('/signup', signup);
@@ -35,6 +37,7 @@ router.use(protect);
 router.use('/my-profile/notifications', notificationsRouter);
 router.post('/my-profile/updatePassword', updatePassword);
 router.patch('/my-profile/updateMe', uploadAvatar, updateMe);
+router.get('/my-profile/posts', getMyPosts);
 router.get('/:id', getUserInfo);
 
 // Admin-only routes

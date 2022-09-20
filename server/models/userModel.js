@@ -68,4 +68,13 @@ userSchema.pre('save', async function (next) {
   this.password = await bcrypt.hash(this.password, 12);
 });
 
+userSchema.pre(/^find/, function (next) {
+  this.populate('city', 'cityName').populate(
+    'neighborhood',
+    'neighborhoodName'
+  );
+
+  next();
+});
+
 module.exports = mongoose.model('User', userSchema);

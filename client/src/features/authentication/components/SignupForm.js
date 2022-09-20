@@ -2,7 +2,6 @@ import React from 'react';
 import {
   Stack,
   Flex,
-  Grid,
   FormControl,
   FormLabel,
   Input,
@@ -18,7 +17,7 @@ import styles from './LoginForm.module.css';
 
 const LoginForm = () => {
   return (
-    <Flex direction='column' align='center'>
+    <Flex direction='column' align='center' justify='start'>
       <Image w='200px' src={rocket} className={styles.floating} />
       <Stack
         direction='column'

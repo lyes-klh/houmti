@@ -6,7 +6,10 @@ import {
   FormLabel,
   Input,
   Textarea,
+  Button,
+  Icon,
 } from '@chakra-ui/react';
+import { FiPlus } from 'react-icons/fi';
 
 // eventAddress: String,
 // eventDate: Date,
@@ -32,6 +35,9 @@ const EventForm = () => {
         <FormLabel>Date & Time</FormLabel>
         <Input type='datetime-local' size='sm' />
       </FormControl>
+      <Button leftIcon={<Icon as={FiPlus} />} colorScheme='green' mr={3}>
+        Create
+      </Button>
     </Stack>
   );
 };

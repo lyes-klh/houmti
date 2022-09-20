@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Button,
   Icon,
@@ -14,6 +14,17 @@ import { FiPlus } from 'react-icons/fi';
 import CreateTabs from './CreateTabs';
 
 const CreateModal = ({ isOpen, onClose }) => {
+  const postType = {
+    0: 'post',
+    1: 'event',
+    2: 'poll',
+    3: 'service',
+  };
+  const [tabIndex, setTabIndex] = useState(0);
+
+  const handleTabsChange = (index) => {
+    setTabIndex(index);
+  };
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered size='lg'>
       <ModalOverlay />
@@ -21,13 +32,10 @@ const CreateModal = ({ isOpen, onClose }) => {
         <ModalHeader>Create</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <CreateTabs />
+          <CreateTabs tabIndex={tabIndex} handleTabsChange={handleTabsChange} />
         </ModalBody>
 
         <ModalFooter>
-          <Button leftIcon={<Icon as={FiPlus} />} colorScheme='green' mr={3}>
-            Create
-          </Button>
           <Button variant='ghost' onClick={onClose}>
             Close
           </Button>

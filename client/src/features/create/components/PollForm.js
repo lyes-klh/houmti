@@ -10,7 +10,10 @@ import {
   NumberInputStepper,
   NumberIncrementStepper,
   NumberDecrementStepper,
+  Button,
+  Icon,
 } from '@chakra-ui/react';
+import { FiPlus } from 'react-icons/fi';
 
 const PollForm = () => {
   const [optionsCount, setOptionsCount] = useState(2);
@@ -56,12 +59,16 @@ const PollForm = () => {
       >
         {options.map((_, i) => (
           <Input
+            key={i}
             colorScheme='green'
             size='sm'
             placeholder={`option ${i + 1}`}
           />
         ))}
       </Grid>
+      <Button leftIcon={<Icon as={FiPlus} />} colorScheme='green' mr={3}>
+        Create
+      </Button>
     </Stack>
   );
 };

@@ -41,11 +41,26 @@ import {
 import NavLink from './NavLink';
 import Notification from './Notification';
 import avatar from '../../assets/images/avatar.jpg';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '../../features/authentication/authSlice';
+import { logoutAction } from '../../features/authentication/authActions';
+import { useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
   const { isOpen, onToggle } = useDisclosure();
   const { colorMode, toggleColorMode } = useColorMode();
   const [isMedium] = useMediaQuery('(min-width: 48rem)');
+
+  const currentUser = useSelector((state) => state.auth.currentUser);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    await logoutAction();
+    dispatch(logout());
+    localStorage.removeItem('currentUser');
+    navigate('/login');
+  };
 
   return (
     <Box
@@ -150,19 +165,19 @@ const Navbar = () => {
                   image={avatar}
                   content={'Lyes commented on your post'}
                 />
-                <Notification
-                  image={avatar}
-                  content={'Lyes commented on your post "This is awesome"'}
-                />
               </PopoverBody>
             </PopoverContent>
           </Popover>
           <Menu autoSelect={false}>
             <MenuButton borderRadius='full'>
               <Avatar
-                name='avatar'
                 size={{ base: 'sm', md: 'md' }}
-                src={avatar}
+                name={currentUser.firstname + ' ' + currentUser.lastname}
+                src={
+                  process.env.REACT_APP_BACKEND +
+                  '/img/users/' +
+                  currentUser.avatar
+                }
               />
             </MenuButton>
             <MenuList bg={useColorModeValue('white', 'gray.900')}>
@@ -189,7 +204,10 @@ const Navbar = () => {
                 {colorMode === 'dark' ? 'Light mode' : 'Dark Mode'}
               </MenuItem>
               <Divider />
-              <MenuItem icon={<Icon as={FiLogOut} mr={2} fontSize='lg' />}>
+              <MenuItem
+                icon={<Icon as={FiLogOut} mr={2} fontSize='lg' />}
+                onClick={handleLogout}
+              >
                 Logout
               </MenuItem>
             </MenuList>

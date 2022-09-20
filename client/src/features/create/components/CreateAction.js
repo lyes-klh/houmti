@@ -9,12 +9,20 @@ import {
 } from '@chakra-ui/react';
 import avatar from '../../../assets/images/avatar.jpg';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const CreateAction = ({ onOpen }) => {
+  const currentUser = useSelector((state) => state.auth.currentUser);
   return (
     <Flex gap={4} justify='center' align='center'>
       <Link to='/profile'>
-        <Avatar name='avatar' size='sm' src={avatar}>
+        <Avatar
+          name={currentUser.firstname + ' ' + currentUser.lastname}
+          size='sm'
+          src={
+            process.env.REACT_APP_BACKEND + '/img/users/' + currentUser.avatar
+          }
+        >
           <AvatarBadge boxSize='1.25em' bg='green.500' />
         </Avatar>
       </Link>

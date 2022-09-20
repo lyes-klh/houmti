@@ -7,9 +7,10 @@ import {
   Textarea,
   InputGroup,
   InputLeftElement,
+  Button,
   Icon,
 } from '@chakra-ui/react';
-import { FiPhone } from 'react-icons/fi';
+import { FiPhone, FiPlus } from 'react-icons/fi';
 
 const ServiceForm = () => {
   return (
@@ -32,6 +33,9 @@ const ServiceForm = () => {
           <Input type='tel' placeholder='Phone number' />
         </InputGroup>
       </FormControl>
+      <Button leftIcon={<Icon as={FiPlus} />} colorScheme='green' mr={3}>
+        Create
+      </Button>
     </Stack>
   );
 };
