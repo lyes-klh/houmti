@@ -14,7 +14,7 @@ import { addPost } from '../../posts/postsSlice';
 import { useDispatch } from 'react-redux';
 import Error from '../../../components/ui/Error';
 
-const PostForm = () => {
+const PostForm = ({ onClose }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [title, setTitle] = useState('');
@@ -56,6 +56,7 @@ const PostForm = () => {
       }
       dispatch(addPost(createdPost));
       setIsLoading(false);
+      onClose();
     } catch (error) {
       setError(error.response.data.message);
       setIsLoading(false);

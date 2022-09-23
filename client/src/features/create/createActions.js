@@ -79,8 +79,8 @@ export const createServiceAction = async (service) => {
     servicePhoneNumber: service.servicePhoneNumber,
     postType: 'service',
   };
-  const res = await houmtiApi.post('/posts', create);
 
+  const res = await houmtiApi.post('/posts', create);
   return res.data;
 };
 

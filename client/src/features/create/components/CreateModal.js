@@ -32,7 +32,11 @@ const CreateModal = ({ isOpen, onClose }) => {
         <ModalHeader>Create</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <CreateTabs tabIndex={tabIndex} handleTabsChange={handleTabsChange} />
+          <CreateTabs
+            tabIndex={tabIndex}
+            handleTabsChange={handleTabsChange}
+            onClose={onClose}
+          />
         </ModalBody>
 
         <ModalFooter>

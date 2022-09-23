@@ -5,7 +5,7 @@ import EventForm from './EventForm';
 import PollForm from './PollForm';
 import ServiceForm from './ServiceForm';
 
-const CreateTabs = ({ tabIndex, handleTabsChange }) => {
+const CreateTabs = ({ tabIndex, handleTabsChange, onClose }) => {
   return (
     <Tabs
       colorScheme='green'
@@ -24,16 +24,16 @@ const CreateTabs = ({ tabIndex, handleTabsChange }) => {
 
       <TabPanels>
         <TabPanel>
-          <PostForm />
+          <PostForm onClose={onClose} />
         </TabPanel>
         <TabPanel>
-          <EventForm />
+          <EventForm onClose={onClose} />
         </TabPanel>
         <TabPanel>
-          <PollForm />
+          <PollForm onClose={onClose} />
         </TabPanel>
         <TabPanel>
-          <ServiceForm />
+          <ServiceForm onClose={onClose} />
         </TabPanel>
       </TabPanels>
     </Tabs>
