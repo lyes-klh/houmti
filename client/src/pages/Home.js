@@ -17,11 +17,12 @@ const Home = () => {
   const [error, setError] = useState(null);
 
   const dispatch = useDispatch();
+  const currentUser = useSelector((state) => state.auth.currentUser);
 
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const res = await getFeedPostsAction();
+        const res = await getFeedPostsAction(currentUser._id);
         dispatch(getFeedPosts(res.data));
         setIsLoading(false);
       } catch (e) {
@@ -31,7 +32,7 @@ const Home = () => {
     };
 
     fetchPosts();
-  }, [dispatch]);
+  }, [dispatch, currentUser._id]);
 
   const feedPosts = useSelector((state) => state.posts.feedPosts);
 

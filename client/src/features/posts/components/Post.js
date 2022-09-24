@@ -24,26 +24,13 @@ const Post = ({ post }) => {
           w='full'
         />
       )}
-      {post.postType === 'service' && (
-        <ServiceContent
-          servicePhoneNumber={post.servicePhoneNumber}
-          demandsCount={post.demandsCount}
-        />
-      )}
-      {post.postType === 'event' && (
-        <EventContent
-          eventAddress={post.eventAddress}
-          eventDate={post.eventDate}
-          eventHour={post.eventHour}
-          participationsCount={post.participationsCount}
-        />
-      )}
-      {post.postType === 'poll' && (
-        <PollContent pollOptions={post.pollOptions} />
-      )}
+      {post.postType === 'service' && <ServiceContent post={post} />}
+      {post.postType === 'event' && <EventContent post={post} />}
+      {post.postType === 'poll' && <PollContent post={post} />}
       <Feedback
         likesCount={post.likesCount}
         commentsCount={post.commentsCount}
+        post={post}
       />
     </PostWrapper>
   );

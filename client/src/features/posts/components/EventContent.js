@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { lightFormat, format } from 'date-fns';
 import {
   Box,
@@ -10,15 +10,55 @@ import {
   Flex,
   useColorModeValue,
 } from '@chakra-ui/react';
-import { FiMapPin, FiCalendar, FiClock, FiUsers } from 'react-icons/fi';
+import {
+  FiMapPin,
+  FiCalendar,
+  FiClock,
+  FiUsers,
+  FiXCircle,
+} from 'react-icons/fi';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  getFeedbackAction,
+  deleteFeedbackAction,
+  createFeedbackAction,
+} from '../feedbackActions';
+import { participate, unparticipate } from '../postsSlice';
 
-const EventContent = ({
-  eventAddress,
-  eventDate,
-  eventHour,
-  participationsCount,
-}) => {
-  const [day, month] = format(new Date(eventDate), 'do LLL').split(' ');
+const EventContent = ({ post }) => {
+  const [day, month] = format(new Date(post.eventDate), 'do LLL').split(' ');
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(false);
+
+  const dispatch = useDispatch();
+  const currentUser = useSelector((state) => state.auth.currentUser);
+
+  const handleParticipation = async (e) => {
+    try {
+      setIsLoading(true);
+
+      if (post.participated) {
+        const res = await getFeedbackAction(post._id, {
+          user: currentUser._id,
+          feedbackType: 'Participate',
+        });
+
+        await deleteFeedbackAction(post._id, res.data[0]._id);
+        dispatch(unparticipate(post._id));
+      } else {
+        await createFeedbackAction(post._id, {
+          feedbackType: 'Participate',
+        });
+        dispatch(participate(post._id));
+      }
+
+      setIsLoading(false);
+    } catch (e) {
+      setError(e.response.data.message);
+      setIsLoading(false);
+    }
+  };
 
   return (
     <Box px={4}>
@@ -42,20 +82,20 @@ const EventContent = ({
           >
             <Stack direction='row' spacing={2} alignItems='center'>
               <Icon as={FiMapPin} />
-              <Text>{eventAddress}</Text>
+              <Text>{post.eventAddress}</Text>
             </Stack>
             <Stack direction='row' spacing={2} alignItems='center'>
               <Icon as={FiCalendar} />
-              <Text>{lightFormat(new Date(eventDate), 'yyyy-MM-dd')}</Text>
+              <Text>{lightFormat(new Date(post.eventDate), 'yyyy-MM-dd')}</Text>
             </Stack>
             <Stack direction='row' spacing={2} alignItems='center'>
               <Icon as={FiClock} />
-              <Text>{eventHour}</Text>
+              <Text>{post.eventHour}</Text>
             </Stack>
             <Stack direction='row' spacing={2} alignItems='center'>
               <Icon as={FiUsers} />
               <Text>
-                {participationsCount} People will participate in this event
+                {post.participationsCount} People will participate in this event
               </Text>
             </Stack>
           </Stack>
@@ -79,8 +119,13 @@ const EventContent = ({
         </Flex>
       </Flex>
 
-      <Button leftIcon={<Icon as={FiCalendar} />} colorScheme='green'>
-        Participate
+      <Button
+        leftIcon={<Icon as={post.participated ? FiXCircle : FiCalendar} />}
+        colorScheme='green'
+        onClick={handleParticipation}
+        isLoading={isLoading}
+      >
+        {post.participated ? 'Cancel Participation' : 'Participate'}
       </Button>
     </Box>
   );

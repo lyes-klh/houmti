@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Box,
   Heading,
@@ -8,9 +8,47 @@ import {
   Button,
   useColorModeValue,
 } from '@chakra-ui/react';
-import { FiUsers, FiPhone, FiBriefcase } from 'react-icons/fi';
+import { FiUsers, FiPhone, FiBriefcase, FiXCircle } from 'react-icons/fi';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  getFeedbackAction,
+  deleteFeedbackAction,
+  createFeedbackAction,
+} from '../feedbackActions';
+import { demandService, undemandService } from '../postsSlice';
 
-const ServiceContent = ({ servicePhoneNumber, demandsCount }) => {
+const ServiceContent = ({ post }) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(false);
+
+  const dispatch = useDispatch();
+  const currentUser = useSelector((state) => state.auth.currentUser);
+
+  const handleDemand = async (e) => {
+    try {
+      setIsLoading(true);
+
+      if (post.demanded) {
+        const res = await getFeedbackAction(post._id, {
+          user: currentUser._id,
+          feedbackType: 'Demand',
+        });
+
+        await deleteFeedbackAction(post._id, res.data[0]._id);
+        dispatch(undemandService(post._id));
+      } else {
+        await createFeedbackAction(post._id, {
+          feedbackType: 'Demand',
+        });
+        dispatch(demandService(post._id));
+      }
+
+      setIsLoading(false);
+    } catch (e) {
+      setError(e.response.data.message);
+      setIsLoading(false);
+    }
+  };
   return (
     <Box px={4}>
       <Heading
@@ -30,15 +68,20 @@ const ServiceContent = ({ servicePhoneNumber, demandsCount }) => {
       >
         <Stack direction='row' spacing={2} alignItems='center'>
           <Icon as={FiPhone} />
-          <Text>{servicePhoneNumber}</Text>
+          <Text>{post.servicePhoneNumber}</Text>
         </Stack>
         <Stack direction='row' spacing={2} alignItems='center'>
           <Icon as={FiUsers} />
-          <Text>{demandsCount} People demanded this service</Text>
+          <Text>{post.demandsCount} People demanded this service</Text>
         </Stack>
       </Stack>
-      <Button leftIcon={<Icon as={FiBriefcase} />} colorScheme='green'>
-        Demand service
+      <Button
+        leftIcon={<Icon as={post.demanded ? FiXCircle : FiBriefcase} />}
+        colorScheme='green'
+        onClick={handleDemand}
+        isLoading={isLoading}
+      >
+        {post.demanded ? 'Cancel Demand' : 'Demand service'}
       </Button>
     </Box>
   );

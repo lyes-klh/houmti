@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Box,
   Stack,
@@ -7,34 +7,63 @@ import {
   Button,
   useColorModeValue,
 } from '@chakra-ui/react';
-import { FiUsers, FiBarChart2 } from 'react-icons/fi';
+import { FiUsers, FiBarChart2, FiXCircle } from 'react-icons/fi';
 import PollOptions from './PollOptions';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  getFeedbackAction,
+  deleteFeedbackAction,
+  createFeedbackAction,
+} from '../feedbackActions';
+import { vote, unvote } from '../postsSlice';
 
-const PollContent = ({ pollOptions }) => {
-  const [votedOption, setvotedOption] = React.useState(null);
-  let totalVotesCount = 0;
-  for (let i = 0; i < pollOptions.length; i++) {
-    totalVotesCount += pollOptions[i].votesCount;
-  }
+const PollContent = ({ post }) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(false);
+  const [votedOption, setvotedOption] = useState(post.votedOption);
+
+  const dispatch = useDispatch();
+  const currentUser = useSelector((state) => state.auth.currentUser);
+
+  const handleVote = async () => {
+    try {
+      setIsLoading(true);
+
+      if (post.voted) {
+        const res = await getFeedbackAction(post._id, {
+          user: currentUser._id,
+          feedbackType: 'Vote',
+        });
+
+        await deleteFeedbackAction(post._id, res.data[0]._id);
+        dispatch(unvote(post._id));
+        setvotedOption('');
+      } else {
+        if (!votedOption) {
+          setIsLoading(false);
+          return;
+        }
+        await createFeedbackAction(post._id, {
+          feedbackType: 'Vote',
+          voteOption: votedOption,
+        });
+        dispatch(vote({ id: post._id, votedOption }));
+      }
+
+      setIsLoading(false);
+    } catch (e) {
+      setError(e.response.data.message);
+      setIsLoading(false);
+    }
+  };
 
   return (
     <Box px={4}>
-      {/* <Heading
-        size='sm'
-        mb={2}
-        mt={4}
-        textTransform='uppercase'
-        letterSpacing='wide'
-        color='green.500'
-      >
-        Vote
-      </Heading> */}
-
       <PollOptions
-        pollOptions={pollOptions}
+        pollOptions={post.pollOptions}
         votedOption={votedOption}
         vote={setvotedOption}
-        totalVotesCount={totalVotesCount}
+        totalVotesCount={post.totalVotesCount}
       />
 
       <Stack
@@ -47,11 +76,16 @@ const PollContent = ({ pollOptions }) => {
         fontSize='sm'
       >
         <Icon as={FiUsers} />
-        <Text>{totalVotesCount} People voted in this poll</Text>
+        <Text>{post.totalVotesCount} People voted in this poll</Text>
       </Stack>
 
-      <Button leftIcon={<Icon as={FiBarChart2} />} colorScheme='green'>
-        Vote
+      <Button
+        leftIcon={<Icon as={post.voted ? FiXCircle : FiBarChart2} />}
+        colorScheme='green'
+        onClick={handleVote}
+        isLoading={isLoading}
+      >
+        {post.voted ? 'Cancel Vote' : 'Vote'}
       </Button>
     </Box>
   );

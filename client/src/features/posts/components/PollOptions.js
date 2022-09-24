@@ -8,7 +8,7 @@ import {
   useColorModeValue,
 } from '@chakra-ui/react';
 
-const PollOption = ({ option, totalVotesCount }) => {
+const PollOption = ({ option, totalVotesCount, votedOption }) => {
   const width = totalVotesCount
     ? (option.votesCount / totalVotesCount) * 100
     : 0;
@@ -32,6 +32,7 @@ const PollOption = ({ option, totalVotesCount }) => {
         size='lg'
         colorScheme='green'
         value={option.option}
+        isChecked={option.option === votedOption}
       >
         {option.option}
       </Radio>
@@ -57,6 +58,7 @@ const PollOptions = ({ pollOptions, votedOption, vote, totalVotesCount }) => {
             key={option._id}
             option={option}
             totalVotesCount={totalVotesCount}
+            votedOption={votedOption}
           />
         ))}
       </Stack>

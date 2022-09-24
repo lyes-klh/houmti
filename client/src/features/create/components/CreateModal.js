@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import {
   Button,
-  Icon,
   Modal,
   ModalOverlay,
   ModalContent,
@@ -10,16 +9,9 @@ import {
   ModalBody,
   ModalFooter,
 } from '@chakra-ui/react';
-import { FiPlus } from 'react-icons/fi';
 import CreateTabs from './CreateTabs';
 
 const CreateModal = ({ isOpen, onClose }) => {
-  const postType = {
-    0: 'post',
-    1: 'event',
-    2: 'poll',
-    3: 'service',
-  };
   const [tabIndex, setTabIndex] = useState(0);
 
   const handleTabsChange = (index) => {
