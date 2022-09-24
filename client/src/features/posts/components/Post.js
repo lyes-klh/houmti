@@ -16,6 +16,7 @@ const Post = ({ post }) => {
         createdAt={post.createdAt}
         city={post.city.cityName}
         neighborhood={post.neighborhood.neighborhoodName}
+        id={post._id}
       />
       <PostContent title={post.title} content={post.content} />
       {post.withImage && (

@@ -7,7 +7,7 @@ import { PostSkeleton } from '../features/posts';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { getFeedPostsAction } from '../features/posts/postsActions';
-import { getFeedPosts } from '../features/posts/postsSlice';
+import { getFeedPosts, setModeFeed } from '../features/posts/postsSlice';
 
 const Home = () => {
   const [isMedium] = useMediaQuery('(min-width: 48rem)');
@@ -30,7 +30,7 @@ const Home = () => {
         setIsLoading(false);
       }
     };
-
+    dispatch(setModeFeed());
     fetchPosts();
   }, [dispatch, currentUser._id]);
 

@@ -64,7 +64,16 @@ export const getFeedPostsAction = async (userId) => {
   return { data: posts };
 };
 
-export const getProfilePostsAction = async () => {
+export const getProfilePostsAction = async (userId) => {
   const res = await houmtiApi.get('/users/my-profile/posts');
-  return res.data;
+  const posts = await getFeedback(res.data.data, userId);
+
+  return { data: posts };
+};
+
+export const getPostAction = async (userId, postId) => {
+  const res = await houmtiApi.get(`/posts/${postId}`);
+  const posts = await getFeedback([res.data.data], userId);
+
+  return posts[0];
 };

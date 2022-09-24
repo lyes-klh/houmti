@@ -124,13 +124,15 @@ exports.createFeedback = catchAsync(async (req, res, next) => {
     post.commentsCount = post.commentsCount + 1;
 
   // create feedback
-  const feedback = await Feedback.create({
+  let feedback = await Feedback.create({
     user: req.user._id,
     post: post._id,
     feedbackType: req.body.feedbackType,
     commentContent: req.body.commentContent,
     votedOption: req.body.voteOption,
   });
+
+  feedback = await Feedback.findById(feedback._id);
 
   // Save new votesCount (if feedback is vote)
   await post.save();

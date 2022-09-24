@@ -27,3 +27,10 @@ export const getFeedbackAction = async (postId, params) => {
   });
   return res.data;
 };
+
+export const getCommentsAction = async (postId) => {
+  const res = await houmtiApi.get(`/posts/${postId}/feedbacks`, {
+    params: { feedbackType: 'Comment' },
+  });
+  return res.data;
+};

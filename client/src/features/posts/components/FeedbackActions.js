@@ -1,11 +1,5 @@
 import React, { useState } from 'react';
-import {
-  Button,
-  Stack,
-  Icon,
-  useColorModeValue,
-  useToast,
-} from '@chakra-ui/react';
+import { Button, Stack, Icon, useColorModeValue } from '@chakra-ui/react';
 import { FiThumbsUp, FiMessageSquare } from 'react-icons/fi';
 import {
   createFeedbackAction,
@@ -16,7 +10,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { likePost, unlikePost } from '../postsSlice';
 
 const FeedbackActions = ({ openComment, post }) => {
-  const handleComment = () => openComment((prev) => !prev);
+  const handleComment = () => {
+    openComment((prev) => !prev);
+  };
   const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.auth.currentUser);
 

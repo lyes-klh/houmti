@@ -129,8 +129,8 @@ exports.getPost = catchAsync(async (req, res, next) => {
   if (!post) return next(new AppError('This post does not exist', 400));
 
   if (
-    post.city !== req.user.city &&
-    post.neighborhood !== req.user.neighborhood
+    !post.city._id.equals(req.user.city._id) &&
+    !post.neighborhood._id.equals(req.user.neighborhood._id)
   )
     return next(new AppError('This post is not available for you', 400));
 

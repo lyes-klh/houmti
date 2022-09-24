@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Box,
   Divider,
@@ -8,9 +8,33 @@ import {
   Input,
 } from '@chakra-ui/react';
 import { useSelector } from 'react-redux';
+import { createFeedbackAction } from '../feedbackActions';
+import { addComment } from '../postsSlice';
+import { useDispatch } from 'react-redux';
 
-const CommentForm = () => {
+const CommentForm = ({ postId }) => {
   const currentUser = useSelector((state) => state.auth.currentUser);
+  const [commentContent, setCommentContent] = useState('');
+
+  const dispatch = useDispatch();
+
+  const changeComment = (e) => {
+    setCommentContent(e.target.value);
+  };
+
+  const commentHandler = async (e) => {
+    try {
+      if (e.key === 'Enter') {
+        const res = await createFeedbackAction(postId, {
+          feedbackType: 'Comment',
+          commentContent,
+        });
+
+        dispatch(addComment({ comment: res.data, id: postId }));
+        setCommentContent('');
+      }
+    } catch (error) {}
+  };
 
   return (
     <Box my={2}>
@@ -37,6 +61,9 @@ const CommentForm = () => {
           focusBorderColor='green.600'
           borderRadius='3xl'
           placeholder='Write a comment...'
+          value={commentContent}
+          onChange={changeComment}
+          onKeyDown={commentHandler}
         ></Input>
       </Stack>
     </Box>

@@ -1,7 +1,8 @@
 import React from 'react';
 import { Flex, Text, useColorModeValue } from '@chakra-ui/react';
+import { Link } from 'react-router-dom';
 
-const FeedbackRecap = ({ likesCount, commentsCount }) => {
+const FeedbackRecap = ({ likesCount, commentsCount, id }) => {
   return (
     <Flex
       justify='space-between'
@@ -11,11 +12,11 @@ const FeedbackRecap = ({ likesCount, commentsCount }) => {
       letterSpacing='wider'
     >
       <Text color={useColorModeValue('gray.600', 'gray.400')} ml={1}>
-        {likesCount} Likes
+        <Link to={`/posts/${id}`}>{likesCount} Likes</Link>
       </Text>
 
       <Text color={useColorModeValue('gray.600', 'gray.400')} ml={1}>
-        {commentsCount} Comments
+        <Link to={`/posts/${id}`}>{commentsCount} Comments</Link>
       </Text>
     </Flex>
   );

@@ -33,4 +33,10 @@ const feedbackSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+feedbackSchema.pre(/^find/, function (next) {
+  this.populate('user', 'firstname lastname avatar');
+
+  next();
+});
+
 module.exports = mongoose.model('Feedback', feedbackSchema);

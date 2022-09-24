@@ -7,18 +7,19 @@ import { PostsWrapper, PostSkeleton } from '../features/posts';
 import { ProfileCard } from '../features/profiles';
 import { useDispatch, useSelector } from 'react-redux';
 import { getProfilePostsAction } from '../features/posts/postsActions';
-import { getProfilePosts } from '../features/posts/postsSlice';
+import { getProfilePosts, setModeProfile } from '../features/posts/postsSlice';
 
 const Profile = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const dispatch = useDispatch();
+  const currentUser = useSelector((state) => state.auth.currentUser);
 
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const res = await getProfilePostsAction();
+        const res = await getProfilePostsAction(currentUser._id);
         dispatch(getProfilePosts(res.data));
         setIsLoading(false);
       } catch (e) {
@@ -27,6 +28,7 @@ const Profile = () => {
       }
     };
 
+    dispatch(setModeProfile());
     fetchPosts();
   }, [dispatch]);
 
