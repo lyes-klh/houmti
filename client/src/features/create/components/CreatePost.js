@@ -3,7 +3,7 @@ import { Box, useColorModeValue, useDisclosure } from '@chakra-ui/react';
 import CreateAction from './CreateAction';
 import CreateModal from './CreateModal';
 
-const CreatePost = () => {
+const CreatePost = ({ userId }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <Box
@@ -13,7 +13,7 @@ const CreatePost = () => {
       mb={8}
       boxShadow='lg'
     >
-      <CreateAction onOpen={onOpen} />
+      <CreateAction onOpen={onOpen} userId={userId} />
       <CreateModal isOpen={isOpen} onClose={onClose} />
     </Box>
   );

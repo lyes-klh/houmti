@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import PageWrapper from './PageWrapper';
 import { Post } from '../features/posts';
-import { Box } from '@chakra-ui/react';
-import posts from '../data/posts.json';
 import { PostsWrapper, PostSkeleton } from '../features/posts';
 import { ProfileCard } from '../features/profiles';
 import { useDispatch, useSelector } from 'react-redux';
 import { getProfilePostsAction } from '../features/posts/postsActions';
 import { getProfilePosts, setModeProfile } from '../features/posts/postsSlice';
+import { useParams } from 'react-router-dom';
 
 const Profile = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -16,10 +15,15 @@ const Profile = () => {
   const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.auth.currentUser);
 
+  const profilePosts = useSelector((state) => state.posts.profilePosts);
+
+  const { userId } = useParams();
+
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const res = await getProfilePostsAction(currentUser._id);
+        setIsLoading(true);
+        const res = await getProfilePostsAction(userId, currentUser._id);
         dispatch(getProfilePosts(res.data));
         setIsLoading(false);
       } catch (e) {
@@ -30,13 +34,11 @@ const Profile = () => {
 
     dispatch(setModeProfile());
     fetchPosts();
-  }, [dispatch]);
-
-  const profilePosts = useSelector((state) => state.posts.profilePosts);
+  }, [dispatch, userId, currentUser._id]);
 
   return (
     <PageWrapper>
-      <ProfileCard />
+      <ProfileCard userId={userId} />
       <PostsWrapper>
         {isLoading ? (
           <>
@@ -47,7 +49,6 @@ const Profile = () => {
           </>
         ) : (
           profilePosts.map((post) => <Post key={post._id} post={post} />)
-          // <h1>posts here</h1>
         )}
       </PostsWrapper>
     </PageWrapper>

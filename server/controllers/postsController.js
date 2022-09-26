@@ -116,6 +116,10 @@ exports.createPost = catchAsync(async (req, res, next) => {
     neighborhood: req.user.neighborhood._id,
   });
 
+  const user = await User.findById(req.user._id);
+  user.postsCount = user.postsCount + 1;
+  await user.save();
+
   const post = await Post.findById(createdPost._id);
 
   res.status(201).json({
@@ -161,7 +165,6 @@ exports.updatePost = catchAsync(async (req, res, next) => {
   post.content = req.body.content || post.content;
   post.eventAddress = req.body.eventAddress || post.eventAddress;
   post.eventDate = req.body.eventDate || post.eventDate;
-  post.eventHour = req.body.eventHour || post.eventHour;
   post.eventHour = req.body.eventHour || post.eventHour;
   post.servicePhoneNumber =
     req.body.servicePhoneNumber || post.servicePhoneNumber;

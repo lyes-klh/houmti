@@ -11,11 +11,11 @@ import avatar from '../../../assets/images/avatar.jpg';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
-const CreateAction = ({ onOpen }) => {
+const CreateAction = ({ onOpen, userId }) => {
   const currentUser = useSelector((state) => state.auth.currentUser);
   return (
     <Flex gap={4} justify='center' align='center'>
-      <Link to='/profile'>
+      <Link to={`/profile/${userId}`}>
         <Avatar
           name={currentUser.firstname + ' ' + currentUser.lastname}
           size='sm'

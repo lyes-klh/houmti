@@ -20,6 +20,7 @@ exports.getUserInfo = catchAsync(async (req, res, next) => {
     email: user.email,
     city: user.city,
     neighborhood: user.neighborhood,
+    postsCount: user.postsCount,
     avatar: user.avatar,
   };
 

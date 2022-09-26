@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import Navbar from './layout/Navbar/Navbar';
 import Home from './pages/Home';
 import Login from './pages/Login';
@@ -56,7 +55,7 @@ function App() {
       <Routes>
         <Route element={<PrivateRoutes />}>
           <Route path='/' element={<Home />} />
-          <Route path='/profile' element={<Profile />} />
+          <Route path='/profile/:userId' element={<Profile />} />
           <Route path='/settings' element={<Settings />} />
           <Route path='/posts/:postId' element={<PostFull />} />
         </Route>

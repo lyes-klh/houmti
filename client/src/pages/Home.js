@@ -52,7 +52,7 @@ const Home = () => {
         w='full'
         position='relative'
       >
-        <CreatePost />
+        <CreatePost userId={currentUser._id} />
 
         {isLoading ? (
           <>

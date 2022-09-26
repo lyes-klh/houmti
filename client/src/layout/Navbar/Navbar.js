@@ -105,7 +105,7 @@ const Navbar = () => {
               />
             </Link>
 
-            <Link to='/profile'>
+            <Link to={`/profile/${currentUser._id}`}>
               <IconButton
                 aria-label='Profile'
                 colorScheme='green'
@@ -181,7 +181,7 @@ const Navbar = () => {
               />
             </MenuButton>
             <MenuList bg={useColorModeValue('white', 'gray.900')}>
-              <Link to='/profile'>
+              <Link to={`/profile/${currentUser._id}`}>
                 <MenuItem icon={<Icon as={FiUser} mr={2} fontSize='lg' />}>
                   Profile
                 </MenuItem>
@@ -221,7 +221,7 @@ const Navbar = () => {
             Home
           </NavLink>
           <Divider />
-          <NavLink link='profile' icon={FiUser}>
+          <NavLink link={`/profile/${currentUser._id}`} icon={FiUser}>
             Profile
           </NavLink>
           <Divider />
