@@ -60,7 +60,8 @@ exports.updateMe = catchAsync(async (req, res, next) => {
   user.neighborhood = req.body.neighborhood || user.neighborhood;
   user.avatar = req.body.avatar || user.avatar;
 
-  const userUpdated = await user.save();
+  let userUpdated = await user.save();
+  userUpdated = await User.findById(user._id);
 
   res.status(200).json({
     status: 'success',
