@@ -19,13 +19,14 @@ const Settings = () => {
         Settings
       </Heading>
       <Flex
-        w='full'
+        // w='full'
+        width={{ base: '100%', sm: '35rem', md: '45rem', lg: '50rem' }}
         bg={useColorModeValue('white', 'gray.900')}
         borderRadius={8}
       >
         <Tabs isLazy variant='enclosed' w='full' colorScheme='green'>
           <TabList>
-            <Tab>User Info</Tab>
+            <Tab>Account</Tab>
             <Tab>Password</Tab>
           </TabList>
           <TabPanels>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import Error from '../../../components/ui/Error';
 import {
   Box,
@@ -17,6 +17,7 @@ import {
   getAllCities,
   getAllNeiborhoods,
   updateUser,
+  updateAvatar,
 } from '../settingsActions';
 import { useDispatch } from 'react-redux';
 import { login } from '../../authentication/authSlice';
@@ -31,6 +32,7 @@ const UpdateInfoForm = () => {
   const [neighborhood, setNeighborhood] = useState(
     currentUser.neighborhood._id
   );
+  const file = useRef(null);
 
   const [cities, setCities] = useState([]);
   const [neighborhoods, setNeighborhoods] = useState([]);
@@ -55,6 +57,25 @@ const UpdateInfoForm = () => {
     setNeighborhood(e.target.value);
   };
 
+  const handleOpenInput = async (e) => {
+    file.current.click();
+  };
+
+  const handleUpdateAvatar = async (e) => {
+    try {
+      const avatar = file.current.files[0];
+      const formData = new FormData();
+
+      if (avatar) formData.append('avatar', avatar);
+
+      if (avatar) {
+        const res = await updateAvatar(formData);
+        dispatch(login(res.data.user));
+        localStorage.setItem('currentUser', JSON.stringify(res.data.user));
+      }
+    } catch (error) {}
+  };
+
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
@@ -63,8 +84,11 @@ const UpdateInfoForm = () => {
   const handleUpdate = async (e) => {
     try {
       setIsLoading(true);
-      if (!firstname || !lastname || !city || !neighborhood) {
+      if (!firstname || !lastname || !city) {
         setError('Please enter all the fields');
+        setIsLoading(false);
+
+        return;
       }
       const res = await updateUser({
         firstname,
@@ -112,12 +136,25 @@ const UpdateInfoForm = () => {
           bottom={-2}
           right={4}
           cursor='pointer'
+          onClick={handleOpenInput}
         >
           <Icon as={FiEdit2} />
+          <Input
+            type='file'
+            display='none'
+            ref={file}
+            onChange={handleUpdateAvatar}
+          />
         </Box>
       </Box>
 
-      <SimpleGrid mb={8} columns={2} spacingX={8} spacingY={4}>
+      <SimpleGrid
+        mb={8}
+        // columns={2}
+        spacingX={8}
+        spacingY={4}
+        columns={{ base: '1', sm: '35rem', md: '2' }}
+      >
         <FormControl>
           <FormLabel>Firstname</FormLabel>
           <Input

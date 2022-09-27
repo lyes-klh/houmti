@@ -10,14 +10,12 @@ import {
   Icon,
 } from '@chakra-ui/react';
 import { FiEdit } from 'react-icons/fi';
-import { useSelector } from 'react-redux';
 import { updatePassword } from '../settingsActions';
 import { useDispatch } from 'react-redux';
 import { login } from '../../authentication/authSlice';
 import { useNavigate } from 'react-router-dom';
 
 const UpdatePasswordForm = () => {
-  const currentUser = useSelector((state) => state.auth.currentUser);
   const [password, setPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
 
@@ -53,7 +51,12 @@ const UpdatePasswordForm = () => {
       justifyContent='center'
       flexDirection='column'
     >
-      <SimpleGrid mb={8} columns={2} spacingX={8} spacingY={4}>
+      <SimpleGrid
+        mb={8}
+        columns={{ base: '1', sm: '35rem', md: '2' }}
+        spacingX={8}
+        spacingY={4}
+      >
         <FormControl>
           <FormLabel>Password</FormLabel>
           <Input
