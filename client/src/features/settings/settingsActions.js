@@ -16,3 +16,11 @@ export const updateUser = async (updatedInfo) => {
   const res = await houmtiApi.patch('/users/my-profile/updateMe', updatedInfo);
   return res.data;
 };
+
+export const updatePassword = async (updatedPassword) => {
+  const res = await houmtiApi.post(
+    '/users/my-profile/updatePassword',
+    updatedPassword
+  );
+  return res.data;
+};

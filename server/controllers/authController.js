@@ -230,7 +230,6 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
 });
 
 exports.updatePassword = catchAsync(async (req, res, next) => {
-  console.log('here');
   const { password: currentPassword, newPassword } = req.body;
   if (!currentPassword || !newPassword)
     return next(

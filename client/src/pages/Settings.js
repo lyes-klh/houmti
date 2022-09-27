@@ -10,7 +10,7 @@ import {
   Heading,
   useColorModeValue,
 } from '@chakra-ui/react';
-import { UpdateInfoForm } from '../features/settings';
+import { UpdateInfoForm, UpdatePasswordForm } from '../features/settings';
 
 const Settings = () => {
   return (
@@ -32,9 +32,8 @@ const Settings = () => {
             <TabPanel>
               <UpdateInfoForm />
             </TabPanel>
-            {/* initially not mounted */}
             <TabPanel>
-              <p>two!</p>
+              <UpdatePasswordForm />
             </TabPanel>
           </TabPanels>
         </Tabs>
