@@ -39,8 +39,7 @@ import {
   FiX,
 } from 'react-icons/fi';
 import NavLink from './NavLink';
-import Notification from './Notification';
-import avatar from '../../assets/images/avatar.jpg';
+import { Notifications } from '../../features/notifications';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../../features/authentication/authSlice';
 import { logoutAction } from '../../features/authentication/authActions';
@@ -148,7 +147,7 @@ const Navbar = () => {
             <PopoverTrigger>
               <IconButton
                 aria-label='notifications'
-                colorScheme='yellow'
+                colorScheme='orange'
                 variant='ghost'
                 borderRadius={'full'}
                 icon={<Icon as={FiBell} fontSize={{ base: 'xl', md: '2xl' }} />}
@@ -160,11 +159,8 @@ const Navbar = () => {
               overflow='auto'
             >
               <PopoverHeader>Notifications</PopoverHeader>
-              <PopoverBody py={4}>
-                <Notification
-                  image={avatar}
-                  content={'Lyes commented on your post'}
-                />
+              <PopoverBody>
+                <Notifications />
               </PopoverBody>
             </PopoverContent>
           </Popover>

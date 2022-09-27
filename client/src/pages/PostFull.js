@@ -20,6 +20,7 @@ const PostFull = () => {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
+        setIsLoading(true);
         const post = await getPostAction(currentUser._id, params.postId);
         dispatch(getPost(post));
         setIsLoading(false);
@@ -39,13 +40,7 @@ const PostFull = () => {
   return (
     <PageWrapper>
       <PostsWrapper>
-        {isLoading ? (
-          <>
-            <PostSkeleton />
-          </>
-        ) : (
-          <Post post={post} />
-        )}
+        {isLoading ? <PostSkeleton /> : <Post post={post} />}
       </PostsWrapper>
     </PageWrapper>
   );

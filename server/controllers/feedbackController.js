@@ -138,7 +138,7 @@ exports.createFeedback = catchAsync(async (req, res, next) => {
   await post.save();
 
   // create notification to notify user
-  if (!req.user._id.equals(post.creator)) {
+  if (!req.user._id.equals(post.creator._id)) {
     await Notification.create({
       actor: req.user._id,
       notifier: post.creator,

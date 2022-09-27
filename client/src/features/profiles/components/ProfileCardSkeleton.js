@@ -16,7 +16,8 @@ const ProfileCardSkeleton = () => {
       bg={useColorModeValue('white', 'gray.900')}
       borderRadius={8}
       mb={16}
-      w='full'
+      width={{ base: '100%', sm: '35rem', md: '45rem', lg: '50rem' }}
+      h='21rem'
     >
       <SkeletonCircle size='20' />
       <SkeletonText mt='4' noOfLines={6} spacing='4' />

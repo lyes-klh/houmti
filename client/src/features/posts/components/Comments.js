@@ -38,7 +38,7 @@ const Comment = ({ comment }) => {
         p='2'
         px='4'
         boxShadow='sm'
-        bg={useColorModeValue('gray.100', 'gray.700')}
+        bg={useColorModeValue('gray.100', 'gray.800')}
         borderRadius={12}
         w='full'
       >
