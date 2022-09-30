@@ -6,10 +6,53 @@ const AppError = require('../utils/AppError');
 const APIFeatures = require('../utils/APIFeatures');
 const multerConfig = require('../utils/multerConfig');
 
+const attachCurrentUserFeedback = async (posts, user) => {
+  for (let post of posts) {
+    const params = { user: user._id, post: post._id };
+
+    const like = await Feedback.find({
+      ...params,
+      feedbackType: 'Like',
+    });
+
+    if (like.length !== 0) post.liked = true;
+
+    if (post.postType === 'poll') {
+      const vote = await Feedback.find({
+        ...params,
+        feedbackType: 'Vote',
+      });
+
+      if (vote.length !== 0) {
+        post.voted = true;
+        post.votedOption = vote[0].votedOption;
+      }
+    }
+
+    if (post.postType === 'event') {
+      const participation = await Feedback.find({
+        ...params,
+        feedbackType: 'Participate',
+      });
+
+      if (participation.length !== 0) post.participated = true;
+    }
+
+    if (post.postType === 'service') {
+      const demand = await Feedback.find({
+        ...params,
+        feedbackType: 'Demand',
+      });
+
+      if (demand.length !== 0) post.demanded = true;
+    }
+  }
+};
+
 exports.getAllPosts = catchAsync(async (req, res, next) => {
   let initialQueryOption = {};
 
-  if (!req.user.isAdmin) {
+  if (!req.user.isAdmin || !req.body.profilePosts) {
     // Only search posts for the user's city or neighborhood
     if (req.user.neighborhood)
       initialQueryOption = { neighborhood: req.user.neighborhood };
@@ -22,6 +65,11 @@ exports.getAllPosts = catchAsync(async (req, res, next) => {
     .project()
     .paginate();
   posts = await posts.DBQuery;
+
+  // attach the currentUser feedback for each post
+  posts = JSON.parse(JSON.stringify(posts));
+
+  await attachCurrentUserFeedback(posts, req.user);
 
   res.status(200).json({
     status: 'success',
@@ -130,7 +178,7 @@ exports.createPost = catchAsync(async (req, res, next) => {
 });
 
 exports.getPost = catchAsync(async (req, res, next) => {
-  const post = await Post.findById(req.params.id);
+  let post = await Post.findById(req.params.id);
   if (!post) return next(new AppError('This post does not exist', 400));
 
   if (
@@ -139,9 +187,14 @@ exports.getPost = catchAsync(async (req, res, next) => {
   )
     return next(new AppError('This post is not available for you', 400));
 
+  post = JSON.parse(JSON.stringify(post));
+  post = [post];
+
+  await attachCurrentUserFeedback(post, req.user);
+
   res.status(200).json({
     status: 'success',
-    data: post,
+    data: post[0],
   });
 });
 

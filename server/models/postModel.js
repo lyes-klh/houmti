@@ -60,6 +60,11 @@ const postSchema = new mongoose.Schema(
       default: 0,
     },
 
+    totalVotesCount: {
+      type: Number,
+      default: 0,
+    },
+
     image: String,
     withImage: {
       type: Boolean,

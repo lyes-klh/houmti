@@ -21,7 +21,7 @@ const PostFull = () => {
     const fetchPosts = async () => {
       try {
         setIsLoading(true);
-        const post = await getPostAction(currentUser._id, params.postId);
+        const post = await getPostAction(params.postId);
         dispatch(getPost(post));
         setIsLoading(false);
       } catch (e) {

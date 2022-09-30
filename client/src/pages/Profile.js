@@ -23,7 +23,7 @@ const Profile = () => {
     const fetchPosts = async () => {
       try {
         setIsLoading(true);
-        const res = await getProfilePostsAction(userId, currentUser._id);
+        const res = await getProfilePostsAction(userId);
         dispatch(getProfilePosts(res.data));
         setIsLoading(false);
       } catch (e) {

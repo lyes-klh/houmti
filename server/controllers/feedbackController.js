@@ -49,6 +49,7 @@ const isOptionInPost = (post, body) => {
     if (pollOptions[i].option === voteOption) {
       isOptionExists = true;
       post.pollOptions[i].votesCount = post.pollOptions[i].votesCount + 1;
+      post.totalVotesCount = post.totalVotesCount + 1;
       break;
     }
   return isOptionExists;
@@ -59,6 +60,7 @@ const decrementOptionCount = (post, feedback) => {
   for (let i = 0; i < pollOptions.length; i++)
     if (pollOptions[i].option === feedback.votedOption) {
       post.pollOptions[i].votesCount = post.pollOptions[i].votesCount - 1;
+      post.totalVotesCount = post.totalVotesCount - 1;
       break;
     }
 };
