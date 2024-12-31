@@ -3,7 +3,7 @@ import React from "react";
 import PageWrapper from "./PageWrapper";
 import { SignupForm } from "../features/authentication";
 
-const Login = () => {
+const Signup = () => {
   return (
     <PageWrapper mt={4}>
       <SignupForm />
@@ -11,4 +11,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Signup;
