@@ -1,0 +1,16 @@
+{
+  "name": "houmti",
+  "version": "1.0.0",
+  "description": "A social network for local communities.",
+  "scripts": {
+    "start": "concurrently \"npm run start:client\" \"npm run start:server\"",
+    "start:client": "npm --prefix client start",
+    "start:server": "npm --prefix server start",
+    "install:all": "npm install && npm --prefix client install && npm --prefix server install"
+  },
+  "author": "Lyes Kellouche",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}
