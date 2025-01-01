@@ -10,6 +10,8 @@ This project was developed as the final project for my bachelor's degree, showca
 
 ---
 
+![Houmti Demo](assets/demo.gif)
+
 ## Features
 
 ### User Registration and Profiles
@@ -95,7 +97,7 @@ Ensure you have the following installed:
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/houmti.git
+   git clone https://github.com/lyes-klh/houmti.git
    ```
 2. Navigate to the project directory:
    ```bash
